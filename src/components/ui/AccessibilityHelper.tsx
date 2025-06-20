@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
 
 // Skip to content link (disabled)
 export const SkipToContent: React.FC = () => {
@@ -88,6 +86,8 @@ export const useReducedMotion = () => {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setPrefersReducedMotion(mediaQuery.matches);
 
@@ -107,6 +107,8 @@ export const useHighContrast = () => {
   const [highContrast, setHighContrast] = useState(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const mediaQuery = window.matchMedia('(prefers-contrast: high)');
     setHighContrast(mediaQuery.matches);
 
@@ -131,6 +133,8 @@ export const useColorScheme = () => {
   const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('dark');
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
     setColorScheme(mediaQuery.matches ? 'light' : 'dark');
 

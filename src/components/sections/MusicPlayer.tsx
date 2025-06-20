@@ -53,7 +53,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [shuffledTracks, setShuffledTracks] = useState<Track[]>(playlist.tracks);
-  const [originalTracks, setOriginalTracks] = useState<Track[]>(playlist.tracks);
+  const [originalTracks] = useState<Track[]>(playlist.tracks);
   
   const howlRef = useRef<Howl | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -132,7 +132,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
       src: [track.src],
       html5: true,
         preload: 'metadata', // Preload metadata to check if file exists
-        pool: 1, // Limit to single instance
+        pool: 3, // Increase pool size
       volume: playerState.volume,
       onload: () => {
           console.log('Track loaded successfully:', track.title);

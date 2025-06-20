@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  HeartIcon, 
   XMarkIcon,
   CalendarIcon,
   SparklesIcon,
@@ -85,12 +84,12 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-12 md:mb-16"
           >
-            <h2 className="font-display text-4xl md:text-6xl font-bold mb-4 text-gradient">
+            <h2 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-gradient">
               {title}
             </h2>
-            <p className="text-white/70 text-lg">
+            <p className="text-white/70 text-lg md:text-xl">
               Mensagens escritas com o coração 💌
             </p>
           </motion.div>
@@ -102,7 +101,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 xl:gap-12 max-w-[1200px] mx-auto"
         >
           {letters.map((letter, index) => {
             const IconComponent = letterTypeIcons[letter.type];
@@ -130,7 +129,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                 >
                   {/* Envelope Body */}
                   <div className={cn(
-                    'relative w-full h-48 rounded-lg overflow-hidden',
+                    'relative w-full h-64 md:h-72 lg:h-80 rounded-lg overflow-hidden',
                     'bg-gradient-to-br shadow-lg group-hover:shadow-xl transition-all duration-300',
                     `bg-gradient-to-br ${envelopeColors[letter.type]}`
                   )}>
@@ -139,7 +138,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                     
                     {/* Envelope Flap */}
                     <motion.div
-                      className="absolute top-0 left-0 right-0 h-24 bg-white/10 border-b border-white/20"
+                      className="absolute top-0 left-0 right-0 h-28 md:h-32 lg:h-36 bg-white/10 border-b border-white/20"
                       style={{
                         clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
                       }}
@@ -154,19 +153,19 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                     />
                     
                     {/* Letter Type Icon */}
-                    <div className="absolute top-4 right-4">
+                    <div className="absolute top-4 right-4 md:top-6 md:right-6">
                       <div className={cn(
-                        'w-10 h-10 rounded-full flex items-center justify-center',
+                        'w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center',
                         letterTypeColors[letter.type]
                       )}>
-                        <IconComponent className="w-5 h-5" />
+                        <IconComponent className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8" />
                       </div>
                     </div>
                     
                     {/* Seal */}
-                    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
+                    <div className="absolute bottom-6 md:bottom-8 lg:bottom-10 left-1/2 transform -translate-x-1/2">
                       <motion.div
-                        className="w-12 h-12 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center"
+                        className="w-14 h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center"
                         animate={{
                           scale: [1, 1.1, 1],
                         }}
@@ -176,16 +175,16 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                           ease: "easeInOut"
                         }}
                       >
-                        <HeartSolid className="w-6 h-6 text-white" />
+                        <HeartSolid className="w-7 h-7 md:w-8 md:h-8 lg:w-9 lg:h-9 text-white" />
                       </motion.div>
                     </div>
                     
                     {/* Letter Preview */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                      <h3 className="font-romantic text-lg text-white mb-1 font-semibold">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 lg:p-8 bg-gradient-to-t from-black/60 to-transparent text-center">
+                      <h3 className="font-romantic text-xl md:text-2xl lg:text-3xl text-white mb-2 font-semibold px-6 md:px-8 lg:px-10">
                         {letter.title}
                       </h3>
-                      <p className="text-white/80 text-sm">
+                      <p className="text-white/80 text-sm md:text-base px-6 md:px-8 lg:px-10">
                         {formatDate(letter.date)}
                       </p>
                     </div>
@@ -196,7 +195,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                   
                   {/* Floating Elements */}
                   <motion.div
-                    className="absolute -top-2 -right-2 w-6 h-6 text-gold opacity-0 group-hover:opacity-100"
+                    className="absolute -top-2 -right-2 md:-top-3 md:-right-3 w-8 h-8 md:w-10 md:h-10 text-gold text-2xl md:text-3xl opacity-0 group-hover:opacity-100 flex items-center justify-center"
                     animate={{
                       y: [-10, 0, -10],
                       rotate: [0, 10, 0],

@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
-import { useGSAP } from '@/hooks/useGSAP';
 
 // Konami Code Easter Egg
 export const KonamiCode: React.FC<{ onActivate: () => void }> = ({ onActivate }) => {
@@ -28,9 +26,11 @@ export const KonamiCode: React.FC<{ onActivate: () => void }> = ({ onActivate })
       });
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onActivate]);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [onActivate, konamiCode]);
 
   return null;
 };
@@ -48,8 +48,8 @@ export const SecretHearts: React.FC<SecretHeartsProps> = ({ trigger, onComplete 
     if (trigger) {
       const newHearts = Array.from({ length: 20 }, (_, i) => ({
         id: i,
-        x: (i * 123) % window.innerWidth,
-        y: (i * 456) % window.innerHeight,
+                  x: (i * 123) % (typeof window !== 'undefined' ? window.innerWidth : 1200),
+          y: (i * 456) % (typeof window !== 'undefined' ? window.innerHeight : 800),
       }));
       
       setHearts(newHearts);
@@ -90,7 +90,7 @@ export const HeartCursor: React.FC<{ active: boolean }> = ({ active }) => {
   const [isClicking, setIsClicking] = useState(false);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active || typeof window === 'undefined') return;
 
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
@@ -179,8 +179,10 @@ export const ClickCounter: React.FC = () => {
       setClicks(prev => prev + 1);
     };
 
-    document.addEventListener('click', handleClick);
-    return () => document.removeEventListener('click', handleClick);
+    if (typeof window !== 'undefined') {
+      document.addEventListener('click', handleClick);
+      return () => document.removeEventListener('click', handleClick);
+    }
   }, []);
 
   useEffect(() => {
@@ -294,6 +296,8 @@ export const ScrollSurprise: React.FC = () => {
     if (hasTriggered) return;
 
     const handleScroll = () => {
+      if (typeof window === 'undefined') return;
+      
       const scrollPercentage = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
       
       if (scrollPercentage > 80) {
@@ -302,8 +306,10 @@ export const ScrollSurprise: React.FC = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
   }, [hasTriggered]);
 
   return (

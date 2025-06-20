@@ -264,7 +264,7 @@ Obrigado por sonhar comigo.`,
   {
     id: '4',
     type: 'special',
-    title: 'Por Que Te Amo',
+    title: 'Por Que Te Amo?',
     content: `Te amo porque...
 
 ...você me faz rir até quando estou triste

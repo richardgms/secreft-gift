@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --primary: #1a1a2e;
@@ -9,6 +11,29 @@
   --white: #ffffff;
   --glass: rgba(255, 255, 255, 0.1);
   --glass-dark: rgba(0, 0, 0, 0.2);
+  
+  /* Cores expandidas para 2025 */
+  --neutral-50: #f8f9fa;
+  --neutral-100: #e9ecef;
+  --neutral-200: #dee2e6;
+  --neutral-300: #ced4da;
+  --neutral-400: #94a3b8;
+  --neutral-500: #64748b;
+  --neutral-600: #475569;
+  --neutral-700: #334155;
+  --neutral-800: #1e293b;
+  --neutral-900: #0f172a;
+  
+  /* Estados semânticos */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+  
+  /* Gradientes modernos */
+  --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
   
   --background: var(--primary);
   --foreground: var(--white);
@@ -177,9 +202,10 @@ input, textarea {
   }
 }
 
-/* Efeitos 3D e perspectiva */
+/* Efeitos 3D e perspectiva - Otimizados para performance */
 .perspective-1000 {
   perspective: 1000px;
+  transform-style: preserve-3d;
 }
 
 .transform-style-preserve-3d {
@@ -192,6 +218,21 @@ input, textarea {
 
 .rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+/* Performance optimizations para animações */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 /* Sombras personalizadas */
@@ -237,6 +278,18 @@ input, textarea {
 @keyframes shimmer {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+@keyframes buttonShine {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
 }
 
 @keyframes bounce-subtle {
@@ -370,6 +423,30 @@ input, textarea {
   .animate-scale-pulse {
     animation: none !important;
   }
+  
+  /* Desabilitar efeitos shine para usuarios com sensibilidade */
+  .shine,
+  .buttonShine {
+    animation: none !important;
+  }
+}
+
+/* Focus states melhorados para acessibilidade */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid #f5d76e;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Alto contraste para melhor legibilidade */
+@media (prefers-contrast: high) {
+  :root {
+    --accent: #ff1744;
+    --gold: #ffea00;
+    --neutral-400: #000000;
+  }
 }
 
 /* Classes de espaçamento aprimorado */
@@ -412,4 +489,33 @@ input, textarea {
   max-width: min(95vw, 1600px);
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Efeitos para parallax floating */
+.delay-1000 {
+  animation-delay: 1000ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+.delay-1500 {
+  animation-delay: 1500ms;
+}
+
+/* Otimizações para floating elements */
+.floating-element {
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Efeitos de hover para imagens flutuantes */
+.floating-image {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-image:hover {
+  transform: scale(1.05);
 }

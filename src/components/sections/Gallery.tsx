@@ -81,12 +81,12 @@ const Gallery: React.FC<GalleryProps> = ({ photos, title, className }) => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-8"
           >
-            <h2 className="font-display text-4xl md:text-6xl font-bold mb-4 text-gradient">
+            <h2 className="font-display text-3xl md:text-5xl font-bold mb-3 text-gradient">
               {title}
             </h2>
-            <p className="text-white/70 text-lg">
+            <p className="text-white/70 text-base">
               Cada foto conta um pedaço da nossa história ✨
             </p>
           </motion.div>
@@ -138,7 +138,7 @@ const Gallery: React.FC<GalleryProps> = ({ photos, title, className }) => {
             }}
             className="gallery-swiper"
           >
-            {photos.map((photo, index) => (
+                            {photos.map((photo) => (
               <SwiperSlide key={photo.id}>
                 <GlassCard
                   className="relative group cursor-pointer overflow-hidden"

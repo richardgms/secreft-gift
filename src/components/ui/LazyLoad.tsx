@@ -54,7 +54,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   placeholder,
   blurDataURL,
   onLoad,
-  quality = 75,
+  // quality = 75, // Não utilizado no momento
   priority = false,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -271,13 +271,15 @@ export const PerformanceMonitor: React.FC = () => {
     };
 
     // Wait for load event
-    if (document.readyState === 'complete') {
-      getPerformanceMetrics();
-    } else {
-      window.addEventListener('load', getPerformanceMetrics);
-    }
+    if (typeof window !== 'undefined') {
+      if (document.readyState === 'complete') {
+        getPerformanceMetrics();
+      } else {
+        window.addEventListener('load', getPerformanceMetrics);
+      }
 
-    return () => window.removeEventListener('load', getPerformanceMetrics);
+      return () => window.removeEventListener('load', getPerformanceMetrics);
+    }
   }, []);
 
   if (!metrics || process.env.NODE_ENV === 'production') return null;

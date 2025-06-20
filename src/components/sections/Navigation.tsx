@@ -9,7 +9,8 @@ import {
   ClockIcon,
   HomeIcon,
   Bars3Icon,
-  XMarkIcon
+  XMarkIcon,
+  SparklesIcon
 } from '@heroicons/react/24/outline';
 import { cn } from '@/lib/utils';
 import { GlassCard } from '@/components/ui';
@@ -23,8 +24,8 @@ interface NavigationProps {
 const navigationSections: NavigationSection[] = [
   {
     id: 'home',
-    title: 'Início',
-    icon: 'home',
+    title: 'Mayanne',
+    icon: 'heart',
     href: '#home',
     isActive: false,
   },
@@ -33,6 +34,13 @@ const navigationSections: NavigationSection[] = [
     title: 'Galeria',
     icon: 'photo',
     href: '#gallery',
+    isActive: false,
+  },
+  {
+    id: 'floating-memories',
+    title: 'Memórias',
+    icon: 'sparkles',
+    href: '#floating-memories',
     isActive: false,
   },
   {
@@ -53,10 +61,11 @@ const navigationSections: NavigationSection[] = [
 
 const iconMap = {
   home: HomeIcon,
+  heart: HeartIcon,
   photo: PhotoIcon,
+  sparkles: SparklesIcon,
   envelope: EnvelopeIcon,
   clock: ClockIcon,
-  heart: HeartIcon,
 };
 
 const Navigation: React.FC<NavigationProps> = ({ 
@@ -68,11 +77,15 @@ const Navigation: React.FC<NavigationProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      if (typeof window !== 'undefined') {
+        setScrolled(window.scrollY > 50);
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
   }, []);
 
   const handleSectionClick = (sectionId: string) => {

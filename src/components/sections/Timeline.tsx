@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useRef, useState } from 'react';
+import { motion, useScroll } from 'framer-motion';
 import { 
   MapPinIcon,
   CalendarIcon,
@@ -63,12 +63,12 @@ const Timeline: React.FC<TimelineProps> = ({ events, title, className }) => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-8"
           >
-            <h2 className="font-display text-4xl md:text-6xl font-bold mb-4 text-gradient">
+            <h2 className="font-display text-3xl md:text-5xl font-bold mb-3 text-gradient">
               {title}
             </h2>
-            <p className="text-white/70 text-lg">
+            <p className="text-white/70 text-base">
               A linha do tempo do nosso amor ⏰💕
             </p>
           </motion.div>
