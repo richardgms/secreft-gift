@@ -11,11 +11,10 @@ import {
   GlassCard, 
   FloatingHearts, 
   ParallaxSection, 
-  RippleButton, 
   AnimatedTooltip,
   PulseBadge,
   AnimatedCounter,
-
+  ClickSpark
 } from '@/components/ui';
 
 import { calculateTimeTogether } from '@/lib/utils';
@@ -23,7 +22,6 @@ import { galleryPhotos, mainPlaylist, relationshipStartDate, loveLetters, timeli
 
 export default function Home() {
   const [showHearts, setShowHearts] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   const triggerHearts = () => {
     setShowHearts(true);
@@ -33,8 +31,10 @@ export default function Home() {
 
 
   useEffect(() => {
-    // Simular carregamento inicial
-    const timer = setTimeout(() => setIsLoaded(true), 500);
+    // Inicialização do componente
+    const timer = setTimeout(() => {
+      // Componente carregado
+    }, 500);
 
     return () => {
       clearTimeout(timer);
@@ -42,12 +42,17 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="relative min-h-screen" id="main-content">
+    <ClickSpark
+      sparkColor='#ffd700'
+      sparkSize={12}
+      sparkRadius={20}
+      sparkCount={6}
+      duration={500}
+      easing="ease-out"
+    >
+      <main className="relative min-h-screen" id="main-content">
 
-
-
-
-      {/* Home Section */}
+        {/* Home Section */}
       <ParallaxSection 
         id="home" 
         data-section="home" 
@@ -102,19 +107,19 @@ export default function Home() {
                   tilt
                   onClick={triggerHearts}
                 >
-                  <div className="text-center">
-                    <p className="text-sm text-white/60 mb-2">Juntos há</p>
+                <div className="text-center">
+                  <p className="text-sm text-white/60 mb-2">Juntos há</p>
                     <div className="font-display text-2xl md:text-3xl text-gold">
                       <AnimatedCounter 
-                        end={calculateTimeTogether(relationshipStartDate).split(' ')[0] as any}
+                        end={parseInt(calculateTimeTogether(relationshipStartDate).split(' ')[0])}
                         suffix={` ${calculateTimeTogether(relationshipStartDate).split(' ').slice(1).join(' ')}`}
                       />
                     </div>
-                    <p className="text-sm text-white/60 mt-2">
-                      e cada dia é mais especial ✨
-                    </p>
-                  </div>
-                </GlassCard>
+                  <p className="text-sm text-white/60 mt-2">
+                    e cada dia é mais especial ✨
+                  </p>
+                </div>
+              </GlassCard>
               </AnimatedTooltip>
             </motion.div>
 
@@ -198,8 +203,8 @@ export default function Home() {
         >
           <div className="flex items-center justify-center mb-4">
             <p className="font-romantic text-2xl text-accent mr-2">
-              Feito com muito amor por Richard
-            </p>
+            Feito com muito amor por Richard
+          </p>
             <motion.div
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ repeat: Infinity, duration: 2 }}
@@ -218,9 +223,7 @@ export default function Home() {
       {/* Music Player */}
       <MusicPlayer playlist={mainPlaylist} />
 
-
-
-
-    </main>
+      </main>
+    </ClickSpark>
   );
 }

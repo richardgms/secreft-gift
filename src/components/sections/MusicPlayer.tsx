@@ -128,34 +128,34 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
     }
 
     try {
-      howlRef.current = new Howl({
-        src: [track.src],
-        html5: true,
+    howlRef.current = new Howl({
+      src: [track.src],
+      html5: true,
         preload: 'metadata', // Preload metadata to check if file exists
         pool: 1, // Limit to single instance
-        volume: playerState.volume,
-        onload: () => {
+      volume: playerState.volume,
+      onload: () => {
           console.log('Track loaded successfully:', track.title);
           clearTimeout(loadingTimeout);
-          setIsLoading(false);
-        },
+        setIsLoading(false);
+      },
         onloaderror: (id, error) => {
           console.error('Error loading track:', track.title, track.src, error);
           clearTimeout(loadingTimeout);
-          setIsLoading(false);
-        },
-        onend: () => {
-          handleNextTrack();
-        },
-        onplay: () => {
+        setIsLoading(false);
+      },
+      onend: () => {
+        handleNextTrack();
+      },
+      onplay: () => {
           console.log('Track started playing:', track.title);
-          setPlayerState(prev => ({ ...prev, isPlaying: true }));
-          startTimeUpdate();
-        },
-        onpause: () => {
-          setPlayerState(prev => ({ ...prev, isPlaying: false }));
-          stopTimeUpdate();
-        },
+        setPlayerState(prev => ({ ...prev, isPlaying: true }));
+        startTimeUpdate();
+      },
+      onpause: () => {
+        setPlayerState(prev => ({ ...prev, isPlaying: false }));
+        stopTimeUpdate();
+      },
         onstop: () => {
           setPlayerState(prev => ({ ...prev, isPlaying: false }));
           stopTimeUpdate();
@@ -220,10 +220,10 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
     }
 
     try {
-      if (playerState.isPlaying) {
+    if (playerState.isPlaying) {
         console.log('Pausing track');
-        howlRef.current.pause();
-      } else {
+      howlRef.current.pause();
+    } else {
         console.log('Playing track');
         // Handle user interaction requirement for audio
         const audioContext = Howler.ctx;
@@ -569,17 +569,17 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
 
                   {/* Control Buttons */}
                   <div className="flex items-center justify-center gap-4 mb-6">
-                                    <motion.button
-                  onClick={handleShuffle}
-                  className={cn(
-                    'p-2 rounded-full transition-colors',
-                    playerState.isShuffling ? 'bg-accent text-white' : 'hover:bg-white/10 text-white'
-                  )}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <ArrowsRightLeftIcon className="w-5 h-5" />
-                </motion.button>
+                    <motion.button
+                      onClick={handleShuffle}
+                      className={cn(
+                        'p-2 rounded-full transition-colors',
+                        playerState.isShuffling ? 'bg-accent text-white' : 'hover:bg-white/10 text-white'
+                      )}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <ArrowsRightLeftIcon className="w-5 h-5" />
+                    </motion.button>
 
                 {/* Debug Audio Button (development only) */}
                 {process.env.NODE_ENV === 'development' && (

@@ -1,7 +1,8 @@
 export { default as GlassCard } from './GlassCard';
-export { default as FloatingHearts } from './FloatingHearts';
+export { default as FloatingHearts } from './FloatingHearts'; 
 export { default as ParallaxSection } from './ParallaxSection';
 export { default as ClientOnly } from './ClientOnly';
+export { default as ClickSpark } from './ClickSpark';
 export { 
   RippleButton, 
   LoadingDots, 

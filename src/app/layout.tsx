@@ -41,13 +41,13 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-      robots: {
-      index: false,
-      follow: false,
-      nocache: true,
-    },
-    icons: {
-      icon: "/favicon.ico",
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+  },
+  icons: {
+    icon: "/favicon.ico",
     },
 
 };

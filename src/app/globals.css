@@ -18,6 +18,16 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  
+  /* Desabilitar seleção de texto */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  
+  /* Desabilitar highlight no mobile */
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
@@ -111,10 +121,21 @@ body::before {
   background: var(--gold);
 }
 
-/* Seleção de texto */
+/* Seleção de texto desabilitada globalmente */
 ::selection {
-  background: var(--accent);
-  color: var(--white);
+  background: transparent;
+}
+
+::-moz-selection {
+  background: transparent;
+}
+
+/* Permitir seleção apenas em campos de input se necessário */
+input, textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
 
 /* Classes utilitárias customizadas */
