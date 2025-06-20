@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   XMarkIcon,
@@ -20,11 +20,42 @@ interface LettersProps {
   className?: string;
 }
 
+
+
 const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
   const [openLetter, setOpenLetter] = useState<Letter | null>(null);
   const [showHearts, setShowHearts] = useState(false);
   const [typewriterText, setTypewriterText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [typewriterInterval, setTypewriterInterval] = useState<NodeJS.Timeout | null>(null);
+
+  // Cleanup do intervalo quando componente for desmontado
+  useEffect(() => {
+    return () => {
+      if (typewriterInterval) {
+        clearInterval(typewriterInterval);
+      }
+      // Restaurar scroll se o componente for desmontado com carta aberta
+      document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
+    };
+  }, [typewriterInterval]);
+
+  // Fechar carta com tecla ESC
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && openLetter) {
+        handleCloseLetter();
+      }
+    };
+
+    if (openLetter) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [openLetter]);
 
   const letterTypeIcons = {
     love: HeartSolid,
@@ -48,6 +79,16 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
   };
 
   const handleOpenLetter = (letter: Letter) => {
+    // Limpar animação anterior se existir
+    if (typewriterInterval) {
+      clearInterval(typewriterInterval);
+      setTypewriterInterval(null);
+    }
+
+    // Bloquear scroll da página
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
     setOpenLetter(letter);
     setIsTyping(true);
     setTypewriterText('');
@@ -64,11 +105,24 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
       } else {
         setIsTyping(false);
         clearInterval(interval);
+        setTypewriterInterval(null);
       }
     }, 50);
+
+    setTypewriterInterval(interval);
   };
 
   const handleCloseLetter = () => {
+    // Limpar animação se estiver rodando
+    if (typewriterInterval) {
+      clearInterval(typewriterInterval);
+      setTypewriterInterval(null);
+    }
+
+    // Restaurar scroll da página
+    document.body.style.overflow = 'unset';
+    document.documentElement.style.overflow = 'unset';
+
     setOpenLetter(null);
     setTypewriterText('');
     setIsTyping(false);
@@ -76,7 +130,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
 
   return (
     <div className={cn('w-full', className)}>
-      <FloatingHearts trigger={showHearts} count={15} size="lg" color="accent">
+        <FloatingHearts trigger={showHearts} count={15} size="lg" color="accent">
         {/* Title */}
         {title && (
           <motion.div
@@ -221,11 +275,10 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
               onClick={handleCloseLetter}
             >
-              {/* Backdrop */}
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
               
               {/* Letter Content */}
               <motion.div
@@ -242,12 +295,20 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                 onClick={(e) => e.stopPropagation()}
                 style={{ perspective: '1000px' }}
               >
-                <GlassCard className="relative overflow-hidden">
+                <div className="relative overflow-hidden rounded-2xl bg-transparent backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] border-0"
+                     style={{
+                       background: 'rgba(255, 255, 255, 0.03)',
+                       backdropFilter: 'blur(25px)',
+                       WebkitBackdropFilter: 'blur(25px)',
+                       border: '1px solid rgba(255, 255, 255, 0.05)',
+                     }}>
                   {/* Letter Header */}
                   <div className={cn(
-                    'p-6 border-b border-white/10',
-                    `bg-gradient-to-r ${envelopeColors[openLetter.type]}/20`
-                  )}>
+                    'p-6 border-b border-white/5'
+                  )}
+                       style={{
+                         background: 'rgba(255, 255, 255, 0.02)',
+                       }}>
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-4">
                         <div className={cn(
@@ -269,23 +330,28 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                         </div>
                       </div>
                       
-                      <button
-                        onClick={handleCloseLetter}
-                        className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
+                      <motion.button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCloseLetter();
+                        }}
+                        className="p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 text-white hover:text-white border border-white/20 hover:border-white/40 group shadow-lg hover:shadow-xl"
+                        title="Fechar carta (ESC)"
+                        style={{ minWidth: '48px', minHeight: '48px' }}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
                       >
-                        <XMarkIcon className="w-6 h-6" />
-                      </button>
+                        <XMarkIcon className="w-7 h-7 group-hover:rotate-90 transition-transform duration-200" />
+                      </motion.button>
                     </div>
                   </div>
                   
                   {/* Letter Content */}
                   <div className="p-8">
                     <div className="relative">
-                      {/* Paper Texture */}
-                      <div className="absolute inset-0 bg-white/5 rounded-lg" />
                       
                       {/* Letter Text */}
-                      <div className="relative font-body text-white/90 leading-relaxed text-lg p-6">
+                      <div className="relative font-body text-white/95 leading-relaxed text-lg p-6">
                         <motion.div
                           className="whitespace-pre-line"
                           style={{
@@ -317,6 +383,9 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                         <p className="font-romantic text-2xl text-gold mt-2">
                           Richard 💕
                         </p>
+                        <p className="text-white/40 text-xs mt-4 font-light">
+                          Clique fora da carta ou pressione ESC para fechar
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -326,7 +395,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                   <div className="absolute top-8 right-8 text-accent/30 text-xl">♡</div>
                   <div className="absolute bottom-4 left-8 text-purple-300/30 text-lg">✿</div>
                   <div className="absolute bottom-8 right-4 text-green-300/30 text-xl">❋</div>
-                </GlassCard>
+                </div>
               </motion.div>
             </motion.div>
           )}
