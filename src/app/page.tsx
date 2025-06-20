@@ -13,9 +13,9 @@ import {
   ParallaxSection, 
   AnimatedTooltip,
   PulseBadge,
-  AnimatedCounter,
-  ClickSpark
+  AnimatedCounter
 } from '@/components/ui';
+import ClickSpark from '@/components/ui/ClickSpark';
 
 import { calculateTimeTogether } from '@/lib/utils';
 import { galleryPhotos, mainPlaylist, relationshipStartDate, loveLetters, timelineEvents } from '@/lib/data';
@@ -56,21 +56,20 @@ export default function Home() {
       <ParallaxSection 
         id="home" 
         data-section="home" 
-        className="min-h-screen flex items-center justify-center px-4 py-20"
+        className="min-h-screen flex items-center justify-center px-6 py-16"
         speed={0.3}
         direction="up"
       >
         <FloatingHearts trigger={showHearts} count={8}>
-          <div className="text-center max-w-4xl mx-auto">
+          <div className="text-center max-w-5xl mx-auto space-y-12">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.2 }}
             >
-              <h1 className="font-display text-6xl md:text-8xl lg:text-9xl font-bold mb-6">
-                <span className="text-gradient">Museu</span>
-                <br />
-                <span className="font-romantic text-5xl md:text-7xl lg:text-8xl text-gold">
+              <h1 className="font-display text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none">
+                <span className="text-gradient block mb-4">Museu</span>
+                <span className="font-romantic text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-gold block">
                   Flutuante
                 </span>
               </h1>
@@ -80,12 +79,12 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.6 }}
-              className="mb-8"
+              className="space-y-6"
             >
-              <p className="text-xl md:text-2xl text-white/80 mb-4">
+              <p className="text-xl md:text-2xl lg:text-3xl text-white/80 font-light">
                 Para a pessoa mais especial do mundo
               </p>
-              <p className="font-romantic text-3xl md:text-4xl text-accent">
+              <p className="font-romantic text-3xl md:text-4xl lg:text-5xl text-accent">
                 Mayanne 💕
               </p>
             </motion.div>
@@ -100,22 +99,22 @@ export default function Home() {
                 position="top"
               >
                 <GlassCard 
-                  className="inline-block mb-8" 
+                  className="inline-block px-8 py-6" 
                   hover 
                   glow
                   shimmer
                   tilt
                   onClick={triggerHearts}
                 >
-                <div className="text-center">
-                  <p className="text-sm text-white/60 mb-2">Juntos há</p>
-                    <div className="font-display text-2xl md:text-3xl text-gold">
+                <div className="text-center space-y-4">
+                  <p className="text-base md:text-lg text-white/60">Juntos há</p>
+                    <div className="font-display text-3xl md:text-4xl lg:text-5xl text-gold font-bold">
                       <AnimatedCounter 
                         end={parseInt(calculateTimeTogether(relationshipStartDate).split(' ')[0])}
                         suffix={` ${calculateTimeTogether(relationshipStartDate).split(' ').slice(1).join(' ')}`}
                       />
                     </div>
-                  <p className="text-sm text-white/60 mt-2">
+                  <p className="text-base md:text-lg text-white/60">
                     e cada dia é mais especial ✨
                   </p>
                 </div>
@@ -127,16 +126,16 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 1.4 }}
-              className="space-y-4"
+              className="space-y-8"
             >
-              <p className="text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg md:text-xl lg:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed font-light">
                 Este é nosso museu pessoal, onde cada memória é uma obra de arte, 
                 cada momento é uma exposição especial, e cada dia juntos é uma nova 
                 peça adicionada à nossa coleção de amor.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-8">
-                <PulseBadge variant="info" className="animate-bounce-subtle">
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                <PulseBadge variant="info" className="animate-bounce-subtle text-base px-6 py-2">
                   Explore rolando a página! 🎉
                 </PulseBadge>
               </div>
@@ -149,7 +148,7 @@ export default function Home() {
       <ParallaxSection 
         id="gallery" 
         data-section="gallery" 
-        className="min-h-screen flex items-center justify-center px-4 py-20"
+        className="min-h-screen flex items-center justify-center px-6 py-20"
         speed={0.2}
         direction="down"
       >
@@ -165,7 +164,7 @@ export default function Home() {
       <ParallaxSection 
         id="letters" 
         data-section="letters" 
-        className="min-h-screen flex items-center justify-center px-4 py-20"
+        className="min-h-screen flex items-center justify-center px-6 py-20"
         speed={0.4}
         direction="left"
       >
@@ -181,7 +180,7 @@ export default function Home() {
       <ParallaxSection 
         id="timeline" 
         data-section="timeline" 
-        className="min-h-screen flex items-center justify-center px-4 py-20"
+        className="min-h-screen flex items-center justify-center px-6 py-20"
         speed={0.3}
         direction="right"
       >
@@ -194,25 +193,26 @@ export default function Home() {
       </ParallaxSection>
 
       {/* Footer */}
-      <footer className="py-12 px-4 text-center mb-24">
+      <footer className="py-16 px-6 text-center mb-24">
         <GlassCard 
-          className="max-w-2xl mx-auto hover-lift" 
+          className="max-w-3xl mx-auto hover-lift px-8 py-8" 
           variant="gold" 
           size="lg"
           shimmer
         >
-          <div className="flex items-center justify-center mb-4">
-            <p className="font-romantic text-2xl text-accent mr-2">
+          <div className="flex items-center justify-center mb-6 space-x-3">
+            <p className="font-romantic text-2xl md:text-3xl text-accent">
             Feito com muito amor por Richard
           </p>
             <motion.div
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ repeat: Infinity, duration: 2 }}
+              className="text-2xl"
             >
               💕
             </motion.div>
           </div>
-          <p className="text-white/60 text-sm">
+          <p className="text-white/60 text-base md:text-lg leading-relaxed">
             Este museu é dedicado exclusivamente à você, Mayanne.
             <br />
             Cada pixel foi pensado com carinho.
