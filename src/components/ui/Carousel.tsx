@@ -3,6 +3,7 @@
 import { IconArrowNarrowRight } from "@tabler/icons-react";
 import { useState, useRef, useId, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { GradientButton } from "./gradient-button";
 
 interface SlideData {
   title: string;
@@ -130,15 +131,16 @@ const Slide = ({ slide, index, current, handleSlideClick, onButtonClick }: Slide
             </p>
           )}
           <div className="flex justify-center">
-            <button 
+            <GradientButton
+              variant="variant"
               onClick={(e) => {
                 e.stopPropagation();
                 onButtonClick?.(index);
               }}
-              className="mt-4 px-6 py-3 w-fit mx-auto text-sm font-medium text-primary bg-gradient-to-r from-gold to-accent hover:from-accent hover:to-gold border border-transparent rounded-full hover:shadow-neon transition-all duration-300 shadow-glass backdrop-blur-sm"
+              className="mt-4"
             >
               {button}
-            </button>
+            </GradientButton>
           </div>
         </article>
       </li>
