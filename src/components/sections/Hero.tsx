@@ -6,9 +6,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline"
 const Hero = () => {
 
   return (
-    <div className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Background decorativo */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/20 via-slate-900/40 to-slate-900"></div>
+    <div className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-transparent">
       
       {/* Conteúdo principal */}
       <div className="relative z-10 text-center space-y-8 px-4">

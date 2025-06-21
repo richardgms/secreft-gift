@@ -4,6 +4,7 @@ export { default as ParallaxSection } from './ParallaxSection';
 export { default as ClientOnly } from './ClientOnly';
 export { default as ClickSpark } from './ClickSpark';
 export { default as SectionIndicator } from './SectionIndicator';
+export { default as Carousel } from './Carousel';
 export { 
   RippleButton, 
   LoadingDots, 

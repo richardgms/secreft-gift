@@ -90,6 +90,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
       // Cleanup
       if (howlRef.current) {
         howlRef.current.stop();
+        howlRef.current.off(); // Remove all event listeners
         howlRef.current.unload();
         howlRef.current = null;
       }
@@ -101,8 +102,14 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
       // Remove event listeners
       document.removeEventListener('click', unlockAudio);
       document.removeEventListener('touchstart', unlockAudio);
+      
+      // Reset state
+      setShouldAutoPlay(false);
     };
   }, []);
+
+  // Track the intention to auto-play to avoid conflicts
+  const [shouldAutoPlay, setShouldAutoPlay] = useState(false);
 
   const loadTrack = (track: Track) => {
     console.log('Loading track:', track.title, track.src);
@@ -117,6 +124,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
     // Cleanup previous track
     if (howlRef.current) {
       howlRef.current.stop();
+      howlRef.current.off(); // Remove all event listeners
       howlRef.current.unload();
       howlRef.current = null;
     }
@@ -128,22 +136,45 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
     }
 
     try {
+      // Encode the URL to handle special characters
+      const encodedSrc = encodeURI(track.src);
+      console.log('Encoded src:', encodedSrc);
+      
     howlRef.current = new Howl({
-      src: [track.src],
+      src: [encodedSrc],
       html5: true,
         preload: 'metadata', // Preload metadata to check if file exists
         pool: 3, // Increase pool size
+        format: ['mp3'], // Explicitly specify format
       volume: playerState.volume,
       onload: () => {
           console.log('Track loaded successfully:', track.title);
           clearTimeout(loadingTimeout);
         setIsLoading(false);
+        
+        // Only auto-play if the user intended to play this track
+        if (shouldAutoPlay && howlRef.current) {
+          console.log('Auto-playing after track load:', track.title);
+          setTimeout(() => {
+            if (howlRef.current && shouldAutoPlay) {
+              try {
+                howlRef.current.play();
+                setShouldAutoPlay(false); // Reset auto-play flag
+              } catch (error) {
+                console.warn('Auto-play failed after load:', error);
+                setShouldAutoPlay(false);
+              }
+            }
+          }, 100);
+        }
       },
         onloaderror: (id, error) => {
           console.error('Error loading track:', track.title, track.src, error);
           clearTimeout(loadingTimeout);
-        setIsLoading(false);
-      },
+          setIsLoading(false);
+          setShouldAutoPlay(false); // Clear auto-play flag on error
+          // Don't auto-advance to next track on load error to avoid infinite loops
+        },
       onend: () => {
         handleNextTrack();
       },
@@ -163,13 +194,15 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
         onplayerror: (id, error) => {
           console.error('Playback error:', track.title, error);
           setPlayerState(prev => ({ ...prev, isPlaying: false }));
+          setShouldAutoPlay(false); // Clear auto-play flag on error
+          // Don't auto-advance to next track on error to avoid infinite loops
         },
       });
       
-      // Force load immediately 
+      // Single load attempt if needed
       setTimeout(() => {
         if (howlRef.current && howlRef.current.state() === 'unloaded') {
-          console.log('Forcing load for:', track.title);
+          console.log('Loading track:', track.title);
           howlRef.current.load();
         }
       }, 100);
@@ -216,14 +249,19 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
 
     if (isLoading) {
       console.warn('Track still loading, cannot play yet');
+      // Set auto-play flag so track will play when loaded
+      if (!playerState.isPlaying) {
+        setShouldAutoPlay(true);
+      }
       return;
     }
 
     try {
-    if (playerState.isPlaying) {
+      if (playerState.isPlaying) {
         console.log('Pausing track');
-      howlRef.current.pause();
-    } else {
+        howlRef.current.pause();
+        setShouldAutoPlay(false); // Clear auto-play flag when pausing
+      } else {
         console.log('Playing track');
         // Handle user interaction requirement for audio
         const audioContext = Howler.ctx;
@@ -253,26 +291,17 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
       }
     }
     
+    const wasPlaying = playerState.isPlaying;
     setCurrentIndex(nextIndex);
     const nextTrack = tracks[nextIndex];
     setPlayerState(prev => ({ ...prev, currentTrack: nextTrack }));
-    loadTrack(nextTrack);
     
-    if (playerState.isPlaying) {
-      setTimeout(async () => {
-        try {
-          if (howlRef.current) {
-            const audioContext = Howler.ctx;
-            if (audioContext && audioContext.state === 'suspended') {
-              await audioContext.resume();
-            }
-            howlRef.current.play();
-          }
-        } catch (error) {
-          console.error('Auto-play error:', error);
-        }
-      }, 200);
+    // Set auto-play flag if the user was playing music
+    if (wasPlaying) {
+      setShouldAutoPlay(true);
     }
+    
+    loadTrack(nextTrack);
   };
 
   const handlePrevTrack = () => {
@@ -283,26 +312,17 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
       prevIndex = tracks.length - 1;
     }
     
+    const wasPlaying = playerState.isPlaying;
     setCurrentIndex(prevIndex);
     const prevTrack = tracks[prevIndex];
     setPlayerState(prev => ({ ...prev, currentTrack: prevTrack }));
-    loadTrack(prevTrack);
     
-    if (playerState.isPlaying) {
-      setTimeout(async () => {
-        try {
-          if (howlRef.current) {
-            const audioContext = Howler.ctx;
-            if (audioContext && audioContext.state === 'suspended') {
-              await audioContext.resume();
-            }
-            howlRef.current.play();
-          }
-        } catch (error) {
-          console.error('Auto-play error:', error);
-        }
-      }, 200);
+    // Set auto-play flag if the user was playing music
+    if (wasPlaying) {
+      setShouldAutoPlay(true);
     }
+    
+    loadTrack(prevTrack);
   };
 
   const handleSeek = (value: number) => {
@@ -347,25 +367,16 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
   };
 
   const handleTrackSelect = (track: Track, index: number) => {
+    const wasPlaying = playerState.isPlaying;
     setCurrentIndex(index);
     setPlayerState(prev => ({ ...prev, currentTrack: track }));
-    loadTrack(track);
     
-    if (playerState.isPlaying) {
-      setTimeout(async () => {
-        try {
-          if (howlRef.current) {
-            const audioContext = Howler.ctx;
-            if (audioContext && audioContext.state === 'suspended') {
-              await audioContext.resume();
-            }
-            howlRef.current.play();
-          }
-        } catch (error) {
-          console.error('Auto-play error:', error);
-        }
-      }, 200);
+    // Set auto-play flag if the user was playing music
+    if (wasPlaying) {
+      setShouldAutoPlay(true);
     }
+    
+    loadTrack(track);
   };
 
   const toggleMute = () => {
@@ -401,19 +412,19 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
   const progressPercentage = currentDuration > 0 ? (playerState.currentTime / currentDuration) * 100 : 0;
 
   return (
-    <div className={cn('fixed bottom-0 left-0 right-0 z-40', className)}>
+    <div className={cn('fixed bottom-0 left-0 right-0 z-50', className)}>
       {/* Minimized Player */}
       <motion.div
         initial={{ y: 100 }}
         animate={{ y: 0 }}
-        className="relative"
+        className="relative z-50"
       >
-        <GlassCard className="rounded-none border-x-0 border-b-0 backdrop-blur-xl">
-          <div className="px-4 py-3">
+        <GlassCard className="rounded-none border-x-0 border-b-0 backdrop-blur-xl relative z-50">
+          <div className="px-6 pt-4 pb-3 flex flex-col justify-center min-h-[80px] relative">
             {/* Progress Bar */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-white/10">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-white/10 z-10">
               <div
-                className="h-full bg-gradient-accent transition-all duration-300"
+                className="h-full bg-gradient-accent transition-all duration-300 relative z-20"
                 style={{ width: `${progressPercentage}%` }}
               />
             </div>
@@ -527,10 +538,10 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
               className="overflow-hidden"
             >
               <GlassCard className="rounded-none border-x-0 border-t-0 border-b-0">
-                <div className="p-6">
+                <div className="p-3">
                   {/* Expanded Track Info */}
                   {playerState.currentTrack && (
-                    <div className="flex items-center gap-6 mb-6">
+                    <div className="flex items-center gap-6 mb-4">
                       <div className="w-20 h-20 rounded-xl bg-gradient-accent flex items-center justify-center">
                         <MusicalNoteIcon className="w-10 h-10 text-white" />
                       </div>
@@ -552,7 +563,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
                   )}
 
                   {/* Progress Bar */}
-                  <div className="mb-6">
+                  <div className="mb-4">
                     <input
                       type="range"
                       min="0"
@@ -568,7 +579,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
                   </div>
 
                   {/* Control Buttons */}
-                  <div className="flex items-center justify-center gap-4 mb-6">
+                  <div className="flex items-center justify-center gap-4 mb-4">
                     <motion.button
                       onClick={handleShuffle}
                       className={cn(

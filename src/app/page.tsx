@@ -13,14 +13,13 @@ import {
   GlassCard, 
   FloatingHearts, 
   ParallaxSection, 
-  AnimatedTooltip,
   AnimatedCounter,
   SectionIndicator
 } from '@/components/ui';
 import ClickSpark from '@/components/ui/ClickSpark';
 
 import { calculateTimeTogether } from '@/lib/utils';
-import { galleryPhotos, mainPlaylist, relationshipStartDate, loveLetters, timelineEvents } from '@/lib/data';
+import { galleryPhotos, mainPlaylist, relationshipStartDate, loveLetters, timelineEvents, carouselSlides } from '@/lib/data';
 
 export default function Home() {
   const [showHearts, setShowHearts] = useState(false);
@@ -75,10 +74,10 @@ export default function Home() {
       duration={500}
       easing="ease-out"
     >
-      <main className="relative min-h-screen" id="main-content">
+      <main className="relative min-h-screen pb-0" id="main-content">
 
         {/* Hero Section - Tela inicial */}
-        <div id="hero">
+        <div id="hero" className="w-full">
           <Hero />
         </div>
 
@@ -143,10 +142,6 @@ export default function Home() {
                 margin: 'clamp(24px, 3vw, 32px) 0'
               }}
             >
-              <AnimatedTooltip 
-                content="Clique para uma surpresa! 💕"
-                position="top"
-              >
                 <div 
                   className="inline-block cursor-pointer"
                   onClick={triggerHearts}
@@ -209,7 +204,6 @@ export default function Home() {
                   animation: 'shine 3s infinite'
                 }}></div>
               </div>
-              </AnimatedTooltip>
             </motion.div>
 
             <motion.div
@@ -253,6 +247,7 @@ export default function Home() {
           <Gallery 
             photos={galleryPhotos} 
             title="Nossa Galeria de Momentos Especiais"
+            carouselSlides={carouselSlides}
           />
         </div>
       </ParallaxSection>
@@ -301,7 +296,7 @@ export default function Home() {
       </ParallaxSection>
 
       {/* Footer */}
-      <footer className="py-16 px-6 text-center mb-24">
+      <footer className="py-16 px-6 text-center mb-16 pb-16">
         <GlassCard 
           className="max-w-3xl mx-auto hover-lift px-8 py-8" 
           variant="gold" 

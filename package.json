@@ -12,6 +12,7 @@
     "@headlessui/react": "^2.2.4",
     "@heroicons/react": "^2.2.0",
     "@sentry/nextjs": "^9.30.0",
+    "@tabler/icons-react": "^3.34.0",
     "@types/react-howler": "^5.2.3",
     "clsx": "^2.1.1",
     "framer-motion": "^12.18.1",

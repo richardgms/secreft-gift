@@ -3,33 +3,33 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, EffectCoverflow, Autoplay } from 'swiper/modules';
+
 import { 
   HeartIcon, 
   XMarkIcon, 
   ChevronLeftIcon, 
-  ChevronRightIcon,
-  MagnifyingGlassIcon
+  ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { cn, formatDate } from '@/lib/utils';
-import { GlassCard, FloatingHearts } from '@/components/ui';
+import { GlassCard, FloatingHearts, Carousel } from '@/components/ui';
 import { Photo } from '@/types';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-coverflow';
+
 
 interface GalleryProps {
   photos: Photo[];
   title?: string;
   className?: string;
+  carouselSlides?: Array<{
+    title: string;
+    button: string;
+    src: string;
+    description?: string;
+  }>;
 }
 
-const Gallery: React.FC<GalleryProps> = ({ photos, title, className }) => {
+const Gallery: React.FC<GalleryProps> = ({ photos, title, className, carouselSlides }) => {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [likedPhotos, setLikedPhotos] = useState<Set<string>>(new Set());
   const [showHearts, setShowHearts] = useState(false);
@@ -92,132 +92,26 @@ const Gallery: React.FC<GalleryProps> = ({ photos, title, className }) => {
           </motion.div>
         )}
 
-        {/* Gallery Carousel */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="relative"
-        >
-          <Swiper
-            modules={[Navigation, Pagination, EffectCoverflow, Autoplay]}
-            spaceBetween={30}
-            slidesPerView={1}
-            navigation={{
-              nextEl: '.swiper-button-next-custom',
-              prevEl: '.swiper-button-prev-custom',
-            }}
-            pagination={{
-              clickable: true,
-              dynamicBullets: true,
-            }}
-            effect="coverflow"
-            coverflowEffect={{
-              rotate: 20,
-              stretch: 0,
-              depth: 100,
-              modifier: 1,
-              slideShadows: true,
-            }}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            loop={true}
-            breakpoints={{
-              640: {
-                slidesPerView: 1.5,
-              },
-              768: {
-                slidesPerView: 2,
-              },
-              1024: {
-                slidesPerView: 2.5,
-              },
-            }}
-            className="gallery-swiper"
+        {/* 3D Carousel Section */}
+        {carouselSlides && carouselSlides.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="relative"
           >
-                            {photos.map((photo) => (
-              <SwiperSlide key={photo.id}>
-                <GlassCard
-                  className="relative group cursor-pointer overflow-hidden"
-                  hover
-                  onClick={() => handlePhotoClick(photo)}
-                >
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-lg">
-                    <Image
-                      src={photo.src}
-                      alt={photo.alt}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                    
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    
-                    {/* Photo Actions */}
-                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <motion.button
-                        onClick={(e) => handleLikePhoto(photo.id, e)}
-                        className={cn(
-                          'p-2 rounded-full backdrop-blur-md border border-white/20 transition-all duration-300',
-                          likedPhotos.has(photo.id) 
-                            ? 'bg-accent/80 text-white' 
-                            : 'bg-white/10 text-white hover:bg-white/20'
-                        )}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        {likedPhotos.has(photo.id) ? (
-                          <HeartSolid className="w-5 h-5" />
-                        ) : (
-                          <HeartIcon className="w-5 h-5" />
-                        )}
-                      </motion.button>
-                      
-                      <motion.button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handlePhotoClick(photo);
-                        }}
-                        className="p-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all duration-300"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        <MagnifyingGlassIcon className="w-5 h-5" />
-                      </motion.button>
-                    </div>
-                    
-                    {/* Photo Info */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      <h3 className="font-medium text-white mb-1">
-                        {formatDate(photo.date)}
-                      </h3>
-                      <p className="text-white/80 text-sm line-clamp-2">
-                        {photo.caption}
-                      </p>
-                      {photo.location && (
-                        <p className="text-white/60 text-xs mt-1">
-                          📍 {photo.location}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </GlassCard>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          {/* Custom Navigation Buttons */}
-          <button className="swiper-button-prev-custom absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all duration-300">
-            <ChevronLeftIcon className="w-6 h-6" />
-          </button>
-          <button className="swiper-button-next-custom absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all duration-300">
-            <ChevronRightIcon className="w-6 h-6" />
-          </button>
-        </motion.div>
+            <Carousel 
+              slides={carouselSlides} 
+              onSlideClick={(slideIndex) => {
+                const photo = photos[slideIndex];
+                if (photo) {
+                  handlePhotoClick(photo);
+                }
+              }}
+            />
+          </motion.div>
+        )}
 
         {/* Photo Modal */}
         <AnimatePresence>

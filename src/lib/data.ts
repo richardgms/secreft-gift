@@ -67,10 +67,32 @@ export const gallerySections: GallerySection[] = [
   },
 ];
 
+// Dados para o carousel da galeria
+export const carouselSlides = galleryPhotos.map(photo => ({
+  title: photo.caption.split(' ')[0] === 'Um' ? 'Momento Especial' : 
+         photo.caption.split(' ')[0] === 'Quando' ? 'Tempo Parado' :
+         photo.caption.split(' ')[0] === 'Cada' ? 'Sorriso Iluminado' :
+         photo.caption.split(' ')[0] === 'O' ? 'Melhor Presente' :
+         'Memória Preciosa',
+  button: 'Ver Memória',
+  src: photo.src,
+  description: photo.caption,
+}));
+
 // Playlist de músicas (baseado nos arquivos disponíveis)
 export const musicTracks: Track[] = [
   {
     id: '1',
+    title: 'Quando Bate Aquela Saudade',
+    artist: 'Rubel',
+    album: 'Saudade',
+    src: '/music/playlist/[SPOTDOWNLOADER.COM] Quando Bate Aquela Saudade.mp3',
+    cover: '/images/music-covers/default.jpg',
+    duration: 300,
+    description: 'Para quando você não está aqui 💔',
+  },
+  {
+    id: '2',
     title: 'Xuxuzinho',
     artist: 'Artista',
     album: 'Álbum do Amor',
@@ -80,7 +102,7 @@ export const musicTracks: Track[] = [
     description: 'Uma música que sempre me lembra de você 💕',
   },
   {
-    id: '2',
+    id: '3',
     title: 'Vilarejo',
     artist: 'Marisa Monte',
     album: 'Universo ao Meu Redor',
@@ -90,7 +112,7 @@ export const musicTracks: Track[] = [
     description: 'Nossa canção de amor e simplicidade',
   },
   {
-    id: '3',
+    id: '4',
     title: 'Vem Ser Minha',
     artist: 'Artista',
     album: 'Álbum do Amor',
@@ -100,7 +122,7 @@ export const musicTracks: Track[] = [
     description: 'O convite mais especial que já fiz ❤️',
   },
   {
-    id: '4',
+    id: '5',
     title: 'Um Amor Puro',
     artist: 'Djavan',
     album: 'Clássicos',
@@ -110,7 +132,7 @@ export const musicTracks: Track[] = [
     description: 'Define exatamente o que sinto por você',
   },
   {
-    id: '5',
+    id: '6',
     title: 'Te Amar Demais',
     artist: 'Artista',
     album: 'Coração',
@@ -120,7 +142,7 @@ export const musicTracks: Track[] = [
     description: 'Impossível não te amar demais 💖',
   },
   {
-    id: '6',
+    id: '7',
     title: 'Tangerina',
     artist: 'Artista',
     album: 'Ao Vivo',
@@ -130,7 +152,7 @@ export const musicTracks: Track[] = [
     description: 'Doce como você, minha tangerina 🍊',
   },
   {
-    id: '7',
+    id: '8',
     title: 'Sunshine',
     artist: 'Artista',
     album: 'Internacional',
@@ -138,16 +160,6 @@ export const musicTracks: Track[] = [
     cover: '/images/music-covers/default.jpg',
     duration: 210,
     description: 'You are my sunshine ☀️',
-  },
-  {
-    id: '8',
-    title: 'Quando Bate Aquela Saudade',
-    artist: 'Rubel',
-    album: 'Saudade',
-    src: '/music/playlist/[SPOTDOWNLOADER.COM] Quando Bate Aquela Saudade.mp3',
-    cover: '/images/music-covers/default.jpg',
-    duration: 300,
-    description: 'Para quando você não está aqui 💔',
   },
   {
     id: '9',

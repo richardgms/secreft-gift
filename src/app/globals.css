@@ -57,6 +57,8 @@
 
 html {
   scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -67,6 +69,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 /* Background com estrelas */
