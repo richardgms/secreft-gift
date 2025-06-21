@@ -140,7 +140,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
             viewport={{ once: true }}
             className="text-center mb-12 md:mb-16"
           >
-            <h2 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-gradient">
+            <h2 className="font-bold mb-4 text-gradient use-inter" style={{fontFamily: '"Inter", sans-serif', fontSize: 'clamp(2.25rem, 5vw, 4.5rem)'}}>
               {title}
             </h2>
             <p className="text-white/70 text-lg md:text-xl">
@@ -183,7 +183,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                 >
                   {/* Envelope Body */}
                   <div className={cn(
-                    'relative w-full h-64 md:h-72 lg:h-80 rounded-lg overflow-hidden',
+                    'relative w-full h-44 md:h-48 lg:h-52 rounded-lg overflow-hidden',
                     'bg-gradient-to-br shadow-lg group-hover:shadow-xl transition-all duration-300',
                     `bg-gradient-to-br ${envelopeColors[letter.type]}`
                   )}>
@@ -192,7 +192,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                     
                     {/* Envelope Flap */}
                     <motion.div
-                      className="absolute top-0 left-0 right-0 h-28 md:h-32 lg:h-36 bg-white/10 border-b border-white/20"
+                      className="absolute top-0 left-0 right-0 h-18 md:h-20 lg:h-24 bg-white/10 border-b border-white/20"
                       style={{
                         clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
                       }}
@@ -206,41 +206,15 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                       }}
                     />
                     
-                    {/* Letter Type Icon */}
-                    <div className="absolute top-4 right-4 md:top-6 md:right-6">
-                      <div className={cn(
-                        'w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center',
-                        letterTypeColors[letter.type]
-                      )}>
-                        <IconComponent className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8" />
-                      </div>
-                    </div>
+
                     
-                    {/* Seal */}
-                    <div className="absolute bottom-6 md:bottom-8 lg:bottom-10 left-1/2 transform -translate-x-1/2">
-                      <motion.div
-                        className="w-14 h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center"
-                        animate={{
-                          scale: [1, 1.1, 1],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                      >
-                        <HeartSolid className="w-7 h-7 md:w-8 md:h-8 lg:w-9 lg:h-9 text-white" />
-                      </motion.div>
-                    </div>
+
                     
                     {/* Letter Preview */}
                     <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 lg:p-8 bg-gradient-to-t from-black/60 to-transparent text-center">
-                      <h3 className="font-romantic text-xl md:text-2xl lg:text-3xl text-white mb-2 font-semibold px-6 md:px-8 lg:px-10">
+                      <h3 className="font-romantic text-xl md:text-2xl lg:text-3xl text-white font-semibold px-6 md:px-8 lg:px-10">
                         {letter.title}
                       </h3>
-                      <p className="text-white/80 text-sm md:text-base px-6 md:px-8 lg:px-10">
-                        {formatDate(letter.date)}
-                      </p>
                     </div>
                     
                     {/* Hover Glow */}
@@ -351,7 +325,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                     <div className="relative">
                       
                       {/* Letter Text */}
-                      <div className="relative font-body text-white/95 leading-relaxed text-lg p-6">
+                      <div className="relative text-white/95 leading-relaxed p-6" style={{fontFamily: '"Poiret One", sans-serif', fontSize: '1.3rem'}}>
                         <motion.div
                           className="whitespace-pre-line"
                           style={{

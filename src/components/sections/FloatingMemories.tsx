@@ -59,8 +59,8 @@ const FloatingMemories = () => {
             transition={{ delay: 0.2 }}
           >
             <Image
-              src="/images/galeria/20250419_172844.jpg"
-              alt="Nossa memória"
+              src="/images/love/Screenshot_20250621_132728_Instagram.jpg"
+              alt="Nossa memória especial"
               width={120}
               height={120}
               className="w-20 h-20 md:w-28 md:h-28 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform rounded-lg"
@@ -76,8 +76,8 @@ const FloatingMemories = () => {
             transition={{ delay: 0.4 }}
           >
             <Image
-              src="/images/galeria/20250503_183419.jpg"
-              alt="Nossa memória"
+              src="/images/love/Screenshot_20250621_132745_Instagram.jpg"
+              alt="Nossa memória especial"
               width={140}
               height={140}
               className="w-24 h-24 md:w-32 md:h-32 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform rounded-lg"
@@ -93,8 +93,8 @@ const FloatingMemories = () => {
             transition={{ delay: 0.6 }}
           >
             <Image
-              src="/images/galeria/20250308_052204.jpg"
-              alt="Nossa memória"
+              src="/images/love/Screenshot_20250621_132823_Instagram.jpg"
+              alt="Nossa memória especial"
               width={200}
               height={280}
               className="w-32 h-48 md:w-48 md:h-60 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform rounded-lg"
@@ -110,8 +110,8 @@ const FloatingMemories = () => {
             transition={{ delay: 0.8 }}
           >
             <Image
-              src="/images/galeria/IMG_20250203_172505_051.webp"
-              alt="Nossa memória"
+              src="/images/love/20250305_120200 (1).jpg"
+              alt="Nossa memória especial"
               width={160}
               height={160}
               className="w-28 h-28 md:w-36 md:h-36 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform rounded-lg"
@@ -127,8 +127,8 @@ const FloatingMemories = () => {
             transition={{ delay: 1.0 }}
           >
             <Image
-              src="/images/galeria/20241223_204921 (3).jpg"
-              alt="Nossa memória"
+              src="/images/love/20250322_200319 (1).jpg"
+              alt="Nossa memória especial"
               width={180}
               height={180}
               className="w-32 h-32 md:w-40 md:h-40 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform rounded-lg"
@@ -144,8 +144,8 @@ const FloatingMemories = () => {
             transition={{ delay: 1.2 }}
           >
             <Image
-              src="/images/galeria/img_1748457386762 (2).jpg"
-              alt="Nossa memória"
+              src="/images/love/20250503_183419.jpg"
+              alt="Nossa memória especial"
               width={200}
               height={240}
               className="w-32 h-32 md:w-40 md:h-56 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform rounded-lg"
@@ -161,7 +161,7 @@ const FloatingMemories = () => {
             transition={{ delay: 1.4 }}
           >
             <Image
-              src="/images/galeria/20250419_172844.jpg"
+              src="/images/love/20250308_052204.jpg"
               alt="Nossa memória especial"
               width={260}
               height={300}
@@ -179,7 +179,7 @@ const FloatingMemories = () => {
             transition={{ delay: 1.6 }}
           >
             <Image
-              src="/images/galeria/20250503_183419.jpg"
+              src="/images/love/IMG_20250203_172505_051.webp"
               alt="Nossa memória especial"
               width={160}
               height={160}

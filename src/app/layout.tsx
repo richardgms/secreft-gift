@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Dancing_Script, Inter } from "next/font/google";
+import { Playfair_Display, Dancing_Script } from "next/font/google";
 import "./globals.css";
 
 const playfairDisplay = Playfair_Display({
@@ -14,11 +14,7 @@ const dancingScript = Dancing_Script({
   display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-body",
-  subsets: ["latin"],
-  display: "swap",
-});
+
 
 export const generateViewport = () => ({
   width: "device-width",
@@ -63,9 +59,10 @@ export default function RootLayout({
         <meta name="color-scheme" content="dark light" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet" />
       </head>
       <body
-        className={`${playfairDisplay.variable} ${dancingScript.variable} ${inter.variable} font-body antialiased`}
+        className={`${playfairDisplay.variable} ${dancingScript.variable} antialiased`}
         suppressHydrationWarning={true}
       >
         {children}

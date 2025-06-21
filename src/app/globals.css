@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Poiret+One&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -64,13 +64,49 @@ html {
 body {
   background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, #0f0f1e 100%);
   color: var(--foreground);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: 'Poiret One', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 1.3rem;
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
   margin: 0;
   padding: 0;
+}
+
+.poiret-one-regular {
+  font-family: "Poiret One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Ajuste automático para elementos que usam Poiret One */
+* {
+  --poiret-scale: 1.3;
+}
+
+/* Override classes de texto do Tailwind para Poiret One */
+.text-sm { font-size: calc(0.875rem * var(--poiret-scale)) !important; }
+.text-base { font-size: calc(1rem * var(--poiret-scale)) !important; }
+.text-lg { font-size: calc(1.125rem * var(--poiret-scale)) !important; }
+.text-xl { font-size: calc(1.25rem * var(--poiret-scale)) !important; }
+.text-2xl { font-size: calc(1.5rem * var(--poiret-scale)) !important; }
+.text-3xl { font-size: calc(1.875rem * var(--poiret-scale)) !important; }
+
+/* Elementos que usam Inter mantêm tamanho original */
+[style*="Inter"] .text-sm,
+[style*="Inter"] .text-base,
+[style*="Inter"] .text-lg,
+[style*="Inter"] .text-xl,
+[style*="Inter"] .text-2xl,
+[style*="Inter"] .text-3xl,
+.use-inter .text-sm,
+.use-inter .text-base,
+.use-inter .text-lg,
+.use-inter .text-xl,
+.use-inter .text-2xl,
+.use-inter .text-3xl {
+  font-size: revert !important;
 }
 
 /* Background com estrelas */

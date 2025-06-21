@@ -19,7 +19,7 @@ const config: Config = {
       fontFamily: {
         'display': ['Playfair Display', 'serif'],
         'romantic': ['Dancing Script', 'cursive'],
-        'body': ['Inter', 'sans-serif'],
+        'body': ['Poiret One', 'sans-serif'],
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',

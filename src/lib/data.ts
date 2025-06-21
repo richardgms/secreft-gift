@@ -4,57 +4,57 @@ import { Photo, Track, GallerySection, Playlist, Letter, TimelineEvent } from '@
 export const galleryPhotos: Photo[] = [
   {
     id: '1',
-    src: '/images/galeria/20250419_172844.jpg',
-    alt: 'Momento especial em abril',
+    src: '/images/galeria/1.jpg',
+    alt: 'Primeiro momento especial',
     caption: 'Um dos nossos momentos mais especiais juntos 💕',
-    date: '2025-04-19',
+    date: '2024-01-15',
     location: 'Nosso cantinho especial',
     tags: ['amor', 'momentos-especiais'],
   },
   {
     id: '2',
-    src: '/images/galeria/20250503_183419.jpg',
-    alt: 'Maio romântico',
+    src: '/images/galeria/2.jpg',
+    alt: 'Segundo momento inesquecível',
     caption: 'Quando o tempo para e só existimos nós dois ✨',
-    date: '2025-05-03',
+    date: '2024-02-14',
     location: 'Lugar do coração',
     tags: ['romântico', 'amor'],
   },
   {
     id: '3',
-    src: '/images/galeria/20250308_052204.jpg',
-    alt: 'Março inesquecível',
+    src: '/images/galeria/3.jpg',
+    alt: 'Terceiro momento mágico',
     caption: 'Cada sorriso seu ilumina meu mundo 🌟',
-    date: '2025-03-08',
+    date: '2024-03-10',
     location: 'Nossos momentos',
     tags: ['felicidade', 'sorriso'],
   },
   {
     id: '4',
-    src: '/images/galeria/IMG_20250203_172505_051.webp',
-    alt: 'Fevereiro de amor',
+    src: '/images/galeria/4.png',
+    alt: 'Quarto momento de pura felicidade',
     caption: 'Quando descobri que você é minha pessoa 💖',
-    date: '2025-02-03',
-    location: 'Início da nossa história',
+    date: '2024-04-20',
+    location: 'Descobrindo o amor',
     tags: ['descoberta', 'amor-verdadeiro'],
   },
   {
     id: '5',
-    src: '/images/galeria/20241223_204921 (3).jpg',
-    alt: 'Natal especial',
-    caption: 'O melhor presente de Natal foi ter você comigo 🎄❤️',
-    date: '2024-12-23',
-    location: 'Natal em família',
-    tags: ['natal', 'família', 'presente'],
+    src: '/images/galeria/5.jpg',
+    alt: 'Quinto momento de cumplicidade',
+    caption: 'O melhor presente da vida foi ter você comigo 🎁❤️',
+    date: '2024-05-25',
+    location: 'Nosso lar',
+    tags: ['cumplicidade', 'família', 'presente'],
   },
   {
     id: '6',
-    src: '/images/galeria/img_1748457386762 (2).jpg',
-    alt: 'Memórias preciosas',
-    caption: 'Cada foto nossa conta uma história de amor 📸💕',
-    date: '2024-12-15',
+    src: '/images/galeria/6.jpg',
+    alt: 'Sexto momento de amor eterno',
+    caption: 'Cada foto nossa conta uma história de amor infinito 📸💕',
+    date: '2024-06-30',
     location: 'Nossos registros',
-    tags: ['memórias', 'história-de-amor'],
+    tags: ['memórias', 'história-de-amor', 'infinito'],
   },
 ];
 
@@ -68,16 +68,23 @@ export const gallerySections: GallerySection[] = [
 ];
 
 // Dados para o carousel da galeria
-export const carouselSlides = galleryPhotos.map(photo => ({
-  title: photo.caption.split(' ')[0] === 'Um' ? 'Momento Especial' : 
-         photo.caption.split(' ')[0] === 'Quando' ? 'Tempo Parado' :
-         photo.caption.split(' ')[0] === 'Cada' ? 'Sorriso Iluminado' :
-         photo.caption.split(' ')[0] === 'O' ? 'Melhor Presente' :
-         'Memória Preciosa',
-  button: 'Ver Memória',
-  src: photo.src,
-  description: photo.caption,
-}));
+export const carouselSlides = galleryPhotos.map((photo, index) => {
+  const titles = [
+    'Primeiro Amor',
+    'Momento Eterno', 
+    'Sorriso Iluminado',
+    'Descoberta',
+    'Nosso Lar',
+    'Amor Infinito'
+  ];
+  
+  return {
+    title: titles[index] || 'Memória Especial',
+    button: 'Ver Memória',
+    src: photo.src,
+    description: photo.caption,
+  };
+});
 
 // Playlist de músicas (baseado nos arquivos disponíveis)
 export const musicTracks: Track[] = [
@@ -212,7 +219,7 @@ export const mainPlaylist: Playlist = {
 };
 
 // Data de início do relacionamento
-export const relationshipStartDate = '2024-10-15'; // Você pode ajustar esta data
+export const relationshipStartDate = '2024-12-15'; // Você pode ajustar esta data
 
 // Cartinhas de amor
 export const loveLetters: Letter[] = [

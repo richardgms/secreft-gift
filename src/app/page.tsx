@@ -97,7 +97,7 @@ export default function Home() {
             style={{
               display: 'flex', 
               flexDirection: 'column', 
-              gap: 'clamp(64px, 8vw, 96px)',
+              gap: 'clamp(24px, 3vw, 36px)',
               padding: 'clamp(64px, 8vh, 128px) clamp(16px, 4vw, 48px) clamp(32px, 4vh, 64px)',
               maxWidth: 'min(90vw, 1200px)',
               minHeight: '100vh',
@@ -112,17 +112,17 @@ export default function Home() {
               style={{
                 display: 'flex', 
                 flexDirection: 'column', 
-                gap: 'clamp(32px, 4vw, 48px)',
-                marginBottom: 'clamp(32px, 4vw, 48px)'
+                gap: 'clamp(16px, 2vw, 24px)',
+                marginBottom: 'clamp(8px, 1vw, 16px)'
               }}
             >
               <p className="text-white/80 font-light" style={{
-                fontFamily: '"Inter", sans-serif',
-                fontSize: 'clamp(18px, 3vw, 24px)',
+                fontFamily: '"Poiret One", sans-serif',
+                fontSize: 'clamp(23px, 3.9vw, 31px)',
                 fontWeight: 400,
                 lineHeight: 1.6
               }}>
-                Para a pessoa mais especial do mundo
+                Para a branquela mais especial do mundo
               </p>
               <p className="text-accent" style={{
                 fontFamily: '"Dancing Script", cursive',
@@ -139,7 +139,7 @@ export default function Home() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1, delay: 1 }}
               style={{
-                margin: 'clamp(24px, 3vw, 32px) 0'
+                margin: 'clamp(8px, 1vw, 16px) 0'
               }}
             >
                 <div 
@@ -167,8 +167,8 @@ export default function Home() {
                 >
                 <div className="text-center" style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
                   <p className="text-white/60" style={{
-                    fontFamily: '"Inter", sans-serif',
-                    fontSize: 'clamp(14px, 2vw, 16px)',
+                    fontFamily: '"Poiret One", sans-serif',
+                    fontSize: 'clamp(18px, 2.6vw, 21px)',
                     fontWeight: 500,
                     letterSpacing: '0.01em'
                   }}>Juntos há</p>
@@ -185,12 +185,12 @@ export default function Home() {
                       />
                     </div>
                   <p className="text-white/60" style={{
-                    fontFamily: '"Inter", sans-serif',
-                    fontSize: 'clamp(14px, 2vw, 16px)',
+                    fontFamily: '"Poiret One", sans-serif',
+                    fontSize: 'clamp(18px, 2.6vw, 21px)',
                     fontWeight: 500,
                     letterSpacing: '0.01em'
                   }}>
-                    e cada dia é mais especial ✨
+                    e cada dia é mais especial 🤍
                   </p>
                 </div>
                 {/* Glassmorphism shine effect */}
@@ -213,13 +213,13 @@ export default function Home() {
               style={{
                 display: 'flex', 
                 flexDirection: 'column', 
-                gap: 'clamp(40px, 5vw, 64px)',
-                paddingTop: 'clamp(24px, 3vw, 32px)'
+                gap: 'clamp(16px, 2vw, 24px)',
+                paddingTop: 'clamp(8px, 1vw, 16px)'
               }}
             >
               <p className="text-white/70 max-w-3xl mx-auto leading-relaxed font-light" style={{
-                fontFamily: '"Inter", sans-serif',
-                fontSize: 'clamp(16px, 2.5vw, 20px)',
+                fontFamily: '"Poiret One", sans-serif',
+                fontSize: 'clamp(21px, 3.25vw, 26px)',
                 fontWeight: 400,
                 lineHeight: 1.6,
                 letterSpacing: '0.005em'
@@ -315,7 +315,7 @@ export default function Home() {
               💕
             </motion.div>
           </div>
-          <p className="text-white/60 text-base md:text-lg leading-relaxed">
+          <p className="text-white/60 leading-relaxed use-inter" style={{fontFamily: '"Inter", sans-serif', fontSize: 'clamp(16px, 2.2vw, 20px)'}}>
             Este museu é dedicado exclusivamente à você, Mayanne.
             <br />
             Cada pixel foi pensado com carinho.

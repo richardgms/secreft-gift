@@ -17,7 +17,7 @@ const Hero = () => {
           transition={{ duration: 1, delay: 0.2 }}
           className="space-y-4"
         >
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold">
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold use-inter" style={{fontFamily: '"Inter", sans-serif'}}>
             <span className="bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
               Museu
             </span>
@@ -38,7 +38,8 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.8 }}
-          className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed"
+          className="text-gray-300 max-w-2xl mx-auto leading-relaxed"
+          style={{ fontSize: 'clamp(27px, 3.25vw, 34px)' }}
         >
           Um espaço dedicado às nossas memórias mais preciosas
         </motion.p>
@@ -51,7 +52,7 @@ const Hero = () => {
           className="pt-8"
         >
           <div className="flex flex-col items-center space-y-2 mx-auto">
-            <span className="text-white/80 text-lg font-medium">
+            <span className="text-white/80 font-medium" style={{ fontSize: 'clamp(22px, 2.8vw, 28px)' }}>
               Role para explorar
             </span>
             <motion.div

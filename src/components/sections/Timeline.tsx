@@ -65,7 +65,7 @@ const Timeline: React.FC<TimelineProps> = ({ events, title, className }) => {
             viewport={{ once: true }}
             className="text-center mb-8"
           >
-            <h2 className="font-display text-3xl md:text-5xl font-bold mb-3 text-gradient">
+            <h2 className="font-bold mb-3 text-gradient use-inter" style={{fontFamily: '"Inter", sans-serif', fontSize: 'clamp(1.875rem, 4vw, 3rem)'}}>
               {title}
             </h2>
             <p className="text-white/70 text-base">
