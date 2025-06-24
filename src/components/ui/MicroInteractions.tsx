@@ -318,10 +318,12 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   suffix = '',
 }) => {
   const counterRef = useRef<HTMLSpanElement>(null);
+  const [hasStarted, setHasStarted] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const { animateTypewriter } = useGSAP();
 
   useEffect(() => {
-    if (!counterRef.current) return;
+    if (!counterRef.current || !hasStarted) return;
 
     let current = start;
     const increment = (end - start) / (duration * 60); // 60 FPS
@@ -338,14 +340,52 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     }, 1000 / 60);
 
     return () => clearInterval(timer);
-  }, [start, end, duration, prefix, suffix]);
+  }, [start, end, duration, prefix, suffix, hasStarted]);
+
+  // Usar Intersection Observer para detectar quando o elemento está visível
+  useEffect(() => {
+    if (!counterRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasStarted) {
+            setIsVisible(true);
+            // Pequeno delay para tornar a transição mais suave
+            setTimeout(() => {
+              setHasStarted(true);
+            }, 200);
+          }
+        });
+      },
+      {
+        threshold: 0.5, // Inicia quando 50% do elemento está visível
+        rootMargin: '0px 0px -50px 0px' // Adiciona uma margem para iniciar um pouco antes
+      }
+    );
+
+    observer.observe(counterRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasStarted]);
 
   return (
-    <span
+    <motion.span
       ref={counterRef}
       className={className}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ 
+        opacity: isVisible ? 1 : 0, 
+        scale: isVisible ? 1 : 0.8 
+      }}
+      transition={{ 
+        duration: 0.6, 
+        ease: "easeOut" 
+      }}
     >
       {prefix}{start}{suffix}
-    </span>
+    </motion.span>
   );
 }; 

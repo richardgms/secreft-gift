@@ -45,6 +45,7 @@ export interface Letter {
     color: string;
     seal: string;
   };
+  availableAt?: string; // Data e hora quando a carta estará disponível (formato ISO)
 }
 
 // Tipos para a Timeline

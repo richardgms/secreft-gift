@@ -27,6 +27,8 @@ const config: Config = {
         'typewriter': 'typewriter 3s steps(30, end)',
         'fade-in-up': 'fade-in-up 0.8s ease-out',
         'slide-in-right': 'slide-in-right 0.6s ease-out',
+        'star-movement-bottom': 'star-movement-bottom linear infinite alternate',
+        'star-movement-top': 'star-movement-top linear infinite alternate',
       },
       keyframes: {
         float: {
@@ -48,6 +50,14 @@ const config: Config = {
         'slide-in-right': {
           '0%': { opacity: '0', transform: 'translateX(20px)' },
           '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+        'star-movement-bottom': {
+          '0%': { transform: 'translate(0%, 0%)', opacity: '1' },
+          '100%': { transform: 'translate(-100%, 0%)', opacity: '0' },
+        },
+        'star-movement-top': {
+          '0%': { transform: 'translate(0%, 0%)', opacity: '1' },
+          '100%': { transform: 'translate(100%, 0%)', opacity: '0' },
         },
       },
       backdropBlur: {

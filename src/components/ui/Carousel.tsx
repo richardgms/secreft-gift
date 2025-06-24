@@ -1,9 +1,9 @@
 "use client";
 
+import React, { useState, useRef, useId, useEffect } from "react";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
-import { useState, useRef, useId, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { GradientButton } from "./gradient-button";
+import { StarBorder } from "./star-border";
 
 interface SlideData {
   title: string;
@@ -131,16 +131,17 @@ const Slide = ({ slide, index, current, handleSlideClick, onButtonClick }: Slide
             </p>
           )}
           <div className="flex justify-center">
-            <GradientButton
-              variant="variant"
+            <StarBorder
               onClick={(e) => {
                 e.stopPropagation();
                 onButtonClick?.(index);
               }}
               className="mt-4"
+              color="#f5d76e"
+              speed="4s"
             >
               {button}
-            </GradientButton>
+            </StarBorder>
           </div>
         </article>
       </li>
@@ -198,7 +199,7 @@ export default function Carousel({ slides, className, onSlideClick }: CarouselPr
     }
   };
 
-  const id = useId();
+  const id = "carousel";
 
   return (
     <div

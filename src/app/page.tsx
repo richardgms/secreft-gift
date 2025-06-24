@@ -239,7 +239,7 @@ export default function Home() {
       <ParallaxSection 
         id="gallery" 
         data-section="gallery" 
-        className="h-screen flex items-center justify-center px-6 py-12"
+        className="h-screen flex items-center justify-center px-6 py-12 pb-24"
         speed={0.2}
         direction="down"
       >
@@ -256,7 +256,7 @@ export default function Home() {
       <ParallaxSection 
         id="floating-memories" 
         data-section="floating-memories" 
-        className="h-screen w-full"
+        className="h-screen w-full pt-16"
         speed={0.15}
         direction="up"
       >
@@ -279,21 +279,7 @@ export default function Home() {
         </div>
       </ParallaxSection>
 
-      {/* Timeline Section */}
-      <ParallaxSection 
-        id="timeline" 
-        data-section="timeline" 
-        className="h-screen flex items-center justify-center px-6 py-12"
-        speed={0.3}
-        direction="right"
-      >
-        <div className="max-w-7xl mx-auto w-full">
-          <Timeline 
-            events={timelineEvents} 
-            title="Nossa História de Amor"
-          />
-        </div>
-      </ParallaxSection>
+
 
       {/* Footer */}
       <footer className="py-16 px-6 text-center mb-16 pb-16">
@@ -305,7 +291,7 @@ export default function Home() {
         >
           <div className="flex items-center justify-center mb-6 space-x-3">
             <p className="font-romantic text-2xl md:text-3xl text-accent">
-            Feito com muito amor por Richard
+            Feito com muito amor pelo seu Rich
           </p>
             <motion.div
               animate={{ rotate: [0, 10, -10, 0] }}
@@ -316,9 +302,7 @@ export default function Home() {
             </motion.div>
           </div>
           <p className="text-white/60 leading-relaxed use-inter" style={{fontFamily: '"Inter", sans-serif', fontSize: 'clamp(16px, 2.2vw, 20px)'}}>
-            Este museu é dedicado exclusivamente à você, Mayanne.
-            <br />
-            Cada pixel foi pensado com carinho.
+            Esse museu é exclusivamente dedicado para a minha branquela, minha May 🌟
           </p>
         </GlassCard>
       </footer>
@@ -327,7 +311,7 @@ export default function Home() {
       <MusicPlayer playlist={mainPlaylist} />
 
       {/* Section Indicator */}
-      <SectionIndicator totalSections={6} currentSection={currentSection} />
+      <SectionIndicator totalSections={5} currentSection={currentSection} />
 
       </main>
     </ClickSpark>

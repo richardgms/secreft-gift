@@ -29,4 +29,5 @@ export {
   ProgressiveImage,
   useIntersectionObserver
 } from './LazyLoad'; 
-export { GradientButton, gradientButtonVariants } from './gradient-button'; 
+export { GradientButton, gradientButtonVariants } from './gradient-button';
+export { StarBorder } from './star-border'; 

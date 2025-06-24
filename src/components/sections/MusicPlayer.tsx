@@ -155,18 +155,18 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
         // Only auto-play if the user intended to play this track
         if (shouldAutoPlay && howlRef.current) {
           console.log('Auto-playing after track load:', track.title);
-          setTimeout(() => {
+        setTimeout(() => {
             if (howlRef.current && shouldAutoPlay) {
-              try {
-                howlRef.current.play();
+            try {
+              howlRef.current.play();
                 setShouldAutoPlay(false); // Reset auto-play flag
-              } catch (error) {
-                console.warn('Auto-play failed after load:', error);
+            } catch (error) {
+              console.warn('Auto-play failed after load:', error);
                 setShouldAutoPlay(false);
               }
             }
           }, 100);
-        }
+          }
       },
         onloaderror: (id, error) => {
           console.error('Error loading track:', track.title, track.src, error);
@@ -257,11 +257,11 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
     }
 
     try {
-      if (playerState.isPlaying) {
+    if (playerState.isPlaying) {
         console.log('Pausing track');
-        howlRef.current.pause();
+      howlRef.current.pause();
         setShouldAutoPlay(false); // Clear auto-play flag when pausing
-      } else {
+    } else {
         console.log('Playing track');
         // Handle user interaction requirement for audio
         const audioContext = Howler.ctx;
@@ -374,7 +374,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
     // Set auto-play flag if the user was playing music
     if (wasPlaying) {
       setShouldAutoPlay(true);
-    }
+          }
     
     loadTrack(track);
   };

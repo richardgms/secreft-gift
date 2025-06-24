@@ -28,6 +28,24 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
   const [typewriterText, setTypewriterText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [typewriterInterval, setTypewriterInterval] = useState<NodeJS.Timeout | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [isClient, setIsClient] = useState(false);
+
+  // Verificar se estamos no cliente para evitar erro de hidratação
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Timer para atualizar o tempo atual
+  useEffect(() => {
+    if (!isClient) return;
+    
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isClient]);
 
   // Cleanup do intervalo quando componente for desmontado
   useEffect(() => {
@@ -78,7 +96,52 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
     special: 'from-green-500/80 to-green-500',
   };
 
+  // Verificar se uma carta está disponível
+  const isLetterAvailable = (letter: Letter): boolean => {
+    if (!letter.availableAt) return true;
+    if (!isClient) return false; // No servidor, assumir que não está disponível
+    return currentTime >= new Date(letter.availableAt);
+  };
+
+  // Formatar data e hora de disponibilidade
+  const formatAvailabilityTime = (letter: Letter): string => {
+    if (!letter.availableAt) return '';
+    const date = new Date(letter.availableAt);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString().slice(-2);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    
+    return `${hours}:${minutes}:${seconds}\ndia ${day}/${month}/${year}`;
+  };
+
+  // Calcular tempo restante até disponibilidade
+  const getTimeUntilAvailable = (letter: Letter): string => {
+    if (!letter.availableAt || !isClient) return '';
+    const available = new Date(letter.availableAt);
+    const diff = available.getTime() - currentTime.getTime();
+    
+    if (diff <= 0) return '';
+    
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    if (days > 0) return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+    if (minutes > 0) return `${minutes}m ${seconds}s`;
+    return `${seconds}s`;
+  };
+
   const handleOpenLetter = (letter: Letter) => {
+    // Verificar se a carta está disponível
+    if (!isLetterAvailable(letter)) {
+      return; // Não permitir abertura se não disponível
+    }
+
     // Limpar animação anterior se existir
     if (typewriterInterval) {
       clearInterval(typewriterInterval);
@@ -155,10 +218,12 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 xl:gap-12 max-w-[1200px] mx-auto"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-14 xl:gap-16 max-w-[1200px] mx-auto pt-8"
         >
           {letters.map((letter, index) => {
             const IconComponent = letterTypeIcons[letter.type];
+            const available = isLetterAvailable(letter);
+            const timeRemaining = getTimeUntilAvailable(letter);
             
             return (
               <motion.div
@@ -169,24 +234,70 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                 viewport={{ once: true }}
                 className="relative group"
               >
+                {/* Timer/Availability Info */}
+                {letter.availableAt && (
+                  <motion.div
+                    className="absolute -top-8 left-0 right-0 z-10 text-center"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 + 0.3 }}
+                  >
+                    <div className={cn(
+                      "inline-block px-3 py-1 rounded-full text-xs font-medium",
+                      "bg-black/40 backdrop-blur-sm border text-white",
+                      available ? "border-green-400/50 text-green-300" : "border-orange-400/50 text-orange-300"
+                    )}>
+                      {available ? (
+                        <span className="flex items-center gap-1">
+                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                          Disponível agora!
+                        </span>
+                      ) : (
+                        <div className="whitespace-pre-line leading-tight">
+                          <div className="font-mono text-orange-200">
+                            disponível às 21:12:24
+                          </div>
+                          <div className="text-orange-300/80">
+                            {formatAvailabilityTime(letter).split('\n')[1]}
+                          </div>
+                                                     {isClient && timeRemaining && (
+                             <div className="text-orange-200 font-mono mt-1">
+                               {timeRemaining}
+                             </div>
+                           )}
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+
                 {/* Envelope */}
                 <motion.div
                   onClick={() => handleOpenLetter(letter)}
-                  className="relative cursor-pointer"
-                  whileHover={{ 
+                  className={cn(
+                    "relative",
+                    available ? "cursor-pointer" : "cursor-not-allowed"
+                  )}
+                  whileHover={available ? { 
                     scale: 1.05, 
                     rotateY: 5,
                     rotateX: 5,
-                  }}
-                  whileTap={{ scale: 0.95 }}
+                  } : {}}
+                  whileTap={available ? { scale: 0.95 } : {}}
                   style={{ perspective: '1000px' }}
                 >
                   {/* Envelope Body */}
                   <div className={cn(
                     'relative w-full h-44 md:h-48 lg:h-52 rounded-lg overflow-hidden',
-                    'bg-gradient-to-br shadow-lg group-hover:shadow-xl transition-all duration-300',
+                    'bg-gradient-to-br shadow-lg transition-all duration-300',
+                    available ? 'group-hover:shadow-xl' : 'opacity-60 grayscale',
                     `bg-gradient-to-br ${envelopeColors[letter.type]}`
                   )}>
+                    {/* Lock Overlay for unavailable letters */}
+                    {!available && (
+                      <div className="absolute inset-0 bg-black/50 z-10" />
+                    )}
+
                     {/* Envelope Pattern */}
                     <div className="absolute inset-0 bg-white/5 background-pattern opacity-30" />
                     
@@ -211,8 +322,8 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
 
                     
                     {/* Letter Preview */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 lg:p-8 bg-gradient-to-t from-black/60 to-transparent text-center">
-                      <h3 className="font-romantic text-xl md:text-2xl lg:text-3xl text-white font-semibold px-6 md:px-8 lg:px-10">
+                    <div className="absolute inset-0 flex items-center justify-center p-4 md:p-6 lg:p-8 text-center">
+                      <h3 className="font-romantic text-xl md:text-2xl lg:text-3xl text-white font-semibold px-6 md:px-8 lg:px-10" style={{textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)'}}>
                         {letter.title}
                       </h3>
                     </div>
