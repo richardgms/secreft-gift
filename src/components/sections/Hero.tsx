@@ -18,7 +18,7 @@ const Hero = () => {
           className="space-y-4"
         >
           <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold use-inter" style={{fontFamily: '"Inter", sans-serif'}}>
-            <span className="bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
               Museu
             </span>
           </h1>

@@ -1,109 +1,110 @@
 ---
-id: plan-001
-title: Plano Museu Flutuante - Site Presente 💕
-createdAt: 2025-06-19
-author: Richard
-status: em-execução
+id: plan-005
+title: Personalização do Museu Flutuante para Ana Beatriz
+createdAt: 2025-06-29
+author: Nathan (via Assistant)
+status: draft
 ---
 
 ## 🧩 Scope
 
-Criar um site presente one-page interativo chamado "Museu Flutuante" - uma experiência digital romântica que funciona como um museu pessoal do relacionamento entre Richard e Mayanne. O site incluirá galeria de fotos, player de música, sistema de cartinhas e timeline interativa, tudo com design premium e elementos glassmorphism.
+Modificar o site "Museu Flutuante" existente (atualmente personalizado para Mayanne pelo Richard) para criar uma versão completamente personalizada para Ana Beatriz como presente do Nathan para ela. O site manterá toda a estrutura e funcionalidades atuais, mas será 100% personalizado com:
+
+- Nome: Ana Beatriz
+- Apelidos: Bia, amor, neguinha  
+- Autor/Criador: Nathan
+- Fotos: já estão organizadas nas pastas `/galeria` e `/love`
+- 4 cartas personalizadas fornecidas pelo usuário
 
 ## ✅ Functional Requirements
 
-### 🎵 Sistema de Áudio
-- Player fixo na parte inferior (estilo Spotify)
-- Playlist personalizada com controles completos
-- Visualização da música atual com capa
-- Volume ajustável
-
-### 📸 Galeria Interativa  
-- Carrossel de fotos com zoom
-- Legendas personalizadas
-- Transições suaves e modo fullscreen
-
-### 💌 Sistema de Cartinhas
-- Envelopes clicáveis com animação de abertura
-- Diferentes tipos de carta
-- Efeito typewriter ou escrita à mão
-
-### 📅 Timeline do Relacionamento
-- Linha do tempo interativa
-- Marcos importantes com datas
-- Scroll horizontal suave
+- Substituir todas as referências "Mayanne" por "Ana Beatriz", "Bia", "amor" ou "neguinha" (variando para personalização natural)
+- Substituir todas as referências "Richard" por "Nathan"
+- Substituir apelido "branquela" e "May" pelos apelidos da Ana Beatriz
+- Atualizar as 4 cartas de amor com o conteúdo fornecido pelo usuário
+- Atualizar metadata (título, descrição, author) no layout
+- Manter todas as funcionalidades existentes (galeria, carrossel, player de música, timeline, etc.)
+- Utilizar as fotos já organizadas nas pastas corretas
 
 ## ⚙️ Non-Functional Requirements
 
-- **Performance**: Carregamento < 3 segundos
-- **Mobile-first**: Otimizado para dispositivos móveis
-- **Acessibilidade**: Score > 90
-- **Compatibilidade**: 95% dos browsers móveis
-- **UX**: Tempo de permanência > 10 minutos
+- Performance: manter a mesma performance atual do site
+- Responsividade: manter design responsivo existente  
+- Acessibilidade: preservar recursos de acessibilidade atuais
+- Compatibilidade: manter compatibilidade com navegadores
 
 ## 📚 Guidelines & Packages
 
-### Stack Principal
-- Next.js 14 (App Router)
-- TypeScript
-- TailwindCSS
-- Framer Motion (animações)
-- GSAP (animações complexas)
-
-### Bibliotecas Específicas
-- SwiperJS (carrossel)
-- React Howler (áudio)
-- React Icons
-- @headlessui/react
-
-### Design System
-```css
-:root {
-  --primary: #1a1a2e;
-  --secondary: #16213e;
-  --accent: #e94560;
-  --gold: #f5d76e;
-  --white: #ffffff;
-  --glass: rgba(255, 255, 255, 0.1);
-}
-```
+- Manter arquitetura Next.js 15 existente
+- Preservar sistema de animações com Framer Motion
+- Manter sistema de estilização com Tailwind CSS
+- Utilizar TypeScript para tipagem (estrutura atual)
+- Manter sistema de componentes modulares existente
 
 ## 🔐 Threat Model (Stub)
 
-- Otimização de imagens para evitar carregamento lento
-- Validação de tipos de arquivo de mídia
-- Sanitização de conteúdo de texto
+- Validação de entrada: cartas de amor devem ser sanitizadas
+- Proteção de assets: manter estrutura de pastas segura
+- Privacy: garantir que dados pessoais ficam apenas no cliente
 
 ## 🔢 Execution Plan
 
-### Fase 1 - Setup e Estrutura Base
-1. ✅ Configurar projeto Next.js com todas as dependências
-2. ✅ Criar estrutura de pastas para assets (fotos/músicas)
-3. ✅ Implementar design system e componentes base
-4. ✅ Criar layout principal com navegação por seções
+### Fase 1: Análise e Mapeamento Completo
+1. Identificar TODAS as ocorrências de:
+   - "Mayanne" (nome principal)
+   - "Richard" (autor/criador)
+   - "branquela" (apelido específico da Mayanne)
+   - "May" (apelido curto)
+   - Qualquer outra personalização específica
 
-### Fase 2 - Funcionalidades Core  
-5. ✅ Implementar player de música fixo com controles
-6. ✅ Criar galeria de fotos interativa com carrossel
-7. ✅ Desenvolver sistema de cartinhas com animações
-8. ✅ Implementar timeline do relacionamento
+### Fase 2: Personalização de Textos e Metadados
+2. Atualizar `src/app/layout.tsx`:
+   - Título: "Museu Flutuante 💕 | Para Ana Beatriz"
+   - Description: mencionar Ana Beatriz
+   - Author/creator: Nathan
 
-### Fase 3 - Interatividade e Animações
-9. ✅ Adicionar animações GSAP e Framer Motion
-10. ✅ Implementar efeitos glassmorphism e parallax
-11. ✅ Criar microinterações e hover effects
-12. ✅ Otimizar para dispositivos móveis
+3. Atualizar `src/app/page.tsx`:
+   - Seção hero: substituir "Para a branquela mais especial do mundo" 
+   - Nome principal: "Ana Beatriz" ou variações com apelidos
+   - Footer: "Feito com muito amor pelo seu Nathan"
+   - Descrição final: usar apelidos da Ana Beatriz
 
-### Fase 4 - Polish e Detalhes Finais
-13. ✅ Adicionar easter eggs e elementos surpresa
-14. ✅ Implementar lazy loading e otimizações
-15. ✅ Testes finais e ajustes de UX
+### Fase 3: Personalização das Cartas de Amor
+4. Atualizar `src/lib/data.ts` - seção `loveLetters`:
+   - Substituir conteúdo das 4 cartas existentes pelas fornecidas
+   - Manter estrutura de envelope/cores/datas
+   - Ajustar títulos se necessário
 
-## 📝 Recursos Necessários
+5. Atualizar `src/components/sections/Letters.tsx`:
+   - Assinatura das cartas: "Nathan 💕" ao invés de "Richard 💕"
 
-### Conteúdo que preciso do Richard:
-- [ ] Fotos do casal para a galeria
-- [ ] Lista de músicas significativas com arquivos MP3
-- [ ] Textos das cartinhas/mensagens
-- [ ] Datas e marcos importantes do relacionamento
-- [ ] Preferências específicas de design ou elementos especiais
+### Fase 4: Personalização da Navegação e Componentes
+6. Atualizar `src/components/sections/Navigation.tsx`:
+   - Título da seção home: trocar "Mayanne" por "Bia" ou "Ana Beatriz"
+
+7. Verificar `src/components/ui/EasterEggs.tsx`:
+   - Ajustar mensagens que mencionam "Richard"
+
+### Fase 5: Personalização de Dados Específicos
+8. Revisar `src/lib/data.ts` completamente:
+   - Descrições das fotos no carousel
+   - Timeline de eventos (se houver referências pessoais)
+   - Frases românticas que podem precisar de ajuste
+   - Legendas das fotos da galeria
+
+### Fase 6: Verificação e Refinamento
+9. Fazer busca final por qualquer referência perdida
+10. Testar todas as funcionalidades
+11. Verificar se a personalização ficou natural e variada (usando diferentes apelidos)
+12. Ajustar detalhes finais conforme necessário
+
+### Fase 7: Validação das Fotos
+13. Confirmar que as fotos em `/galeria` e `/love` estão sendo referenciadas corretamente
+14. Verificar se todas as imagens carregam adequadamente
+15. Ajustar legendas/descrições se necessário
+
+**Observações Importantes:**
+- Usar variação natural dos nomes/apelidos (Ana Beatriz, Bia, amor, neguinha) para parecer mais orgânico
+- Manter o tom romântico e carinhoso do site original
+- Preservar toda a estrutura técnica e funcionalidades existentes
+- As 4 cartas fornecidas já estão prontas para substituição direta

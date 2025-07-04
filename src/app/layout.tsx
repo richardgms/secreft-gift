@@ -26,12 +26,12 @@ export const generateViewport = () => ({
 
 export const metadata: Metadata = {
   metadataBase: new URL('http://localhost:3000'),
-  title: "Museu Flutuante 💕 | Para Mayanne",
-  description: "Um museu pessoal do nosso amor - Uma experiência digital única e romântica criada especialmente para você, Mayanne.",
+  title: "Museu Flutuante 💕 | Para Ana Beatriz",
+  description: "Um museu pessoal do nosso amor - Uma experiência digital única e romântica criada especialmente para você, Ana Beatriz.",
   keywords: ["presente", "amor", "relacionamento", "memórias", "romântico", "museu", "digital"],
-  authors: [{ name: "Richard" }],
-  creator: "Richard",
-  publisher: "Richard",
+  authors: [{ name: "Nathan" }],
+  creator: "Nathan",
+  publisher: "Nathan",
   formatDetection: {
     email: false,
     address: false,

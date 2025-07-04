@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Poiret+One&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Quicksand:wght@600;700&family=Nunito:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -92,13 +92,15 @@ body {
   --poiret-scale: 1.3;
 }
 
-/* Override classes de texto do Tailwind para Poiret One */
+/* Override classes de texto do Tailwind para Poiret One - COMENTADO PARA CORRIGIR TAILWIND */
+/* 
 .text-sm { font-size: calc(0.875rem * var(--poiret-scale)) !important; }
 .text-base { font-size: calc(1rem * var(--poiret-scale)) !important; }
 .text-lg { font-size: calc(1.125rem * var(--poiret-scale)) !important; }
 .text-xl { font-size: calc(1.25rem * var(--poiret-scale)) !important; }
 .text-2xl { font-size: calc(1.5rem * var(--poiret-scale)) !important; }
 .text-3xl { font-size: calc(1.875rem * var(--poiret-scale)) !important; }
+*/
 
 /* Elementos que usam Inter mantêm tamanho original */
 [style*="Inter"] .text-sm,
@@ -333,6 +335,17 @@ input, textarea {
   100% { left: 100%; }
 }
 
+/* Shine effect apenas no hover */
+.shine-on-hover {
+  opacity: 0 !important;
+  transition: opacity 0.3s ease !important;
+}
+
+*:hover .shine-on-hover {
+  opacity: 1 !important;
+  animation: shine 2s ease-in-out !important;
+}
+
 @keyframes buttonShine {
   0% { left: -100%; }
   50% { left: 100%; }
@@ -391,7 +404,8 @@ input, textarea {
   backdrop-filter: blur(24px);
 }
 
-/* Transições suaves */
+/* Transições suaves - SOBRESCRIÇÕES REMOVIDAS PARA CORRIGIR TAILWIND */
+/* 
 .transition-smooth {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
@@ -400,12 +414,10 @@ input, textarea {
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
 }
 
-/* Garantir que transições básicas funcionem */
 button, .button, a, .link {
   transition: all 0.3s ease-in-out !important;
 }
 
-/* Transições de hover obrigatórias */
 .hover-lift {
   transition: transform 0.3s ease-in-out !important;
 }
@@ -414,7 +426,6 @@ button, .button, a, .link {
   transition: box-shadow 0.3s ease-in-out !important;
 }
 
-/* Forçar classes de transição do Tailwind */
 .transition, .transition-all {
   transition-property: all !important;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -444,6 +455,7 @@ button, .button, a, .link {
 .ease-in-out {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
+*/
 
 /* Efeitos de texto */
 .text-shadow {
@@ -516,10 +528,12 @@ button, .button, a, .link {
     animation: none !important;
   }
   
-  /* Reduzir apenas animações longas, manter transições curtas */
+  /* Reduzir apenas animações longas, manter transições curtas - COMENTADO */
+  /* 
   * {
     animation-duration: 0.2s !important;
   }
+  */
 }
 
 /* Focus states melhorados para acessibilidade */
@@ -817,4 +831,87 @@ input:focus-visible {
   --border-color-2: hsla(220, 50%, 90%, 0.75);
   transform: translateY(-4px) scale(1.05);
   box-shadow: 0 12px 35px rgba(70, 147, 150, 0.5);
+}
+
+/* LoveCard Component Styles */
+.love-card {
+  background-color: rgba(255, 255, 255, 0.04); /* leve vidro */
+  backdrop-filter: blur(10px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1.25rem;
+  padding: 1.2rem 2.2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.55rem;
+  text-align: center;
+  color: #e4e9ff;
+  font-family: 'Nunito', sans-serif;
+  transition: 0.18s ease;
+}
+.love-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+.love-card:focus-visible {
+  outline: 2px solid #8ed4ff;
+  outline-offset: 3px;
+}
+
+/* Tipografia */
+.intro {
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0.75;
+  margin-bottom: 0.7rem;
+}
+.big {
+  font-size: clamp(2.4rem, 6.5vw, 3.2rem);
+  font-weight: 700;
+  color: #8ed4ff;
+  line-height: 1.1;
+}
+.big small {
+  font-size: 0.42em;
+  font-weight: 600;
+  margin-left: 0.15rem;
+}
+.mid {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #d9e3ff;
+  margin-top: 0.1rem;
+}
+.time {
+  font-size: 0.9rem;
+  font-family: 'JetBrains Mono', monospace;
+  opacity: 0.78;
+  letter-spacing: 0.35px;
+}
+.tagline {
+  font-size: 1.05rem;
+  font-weight: 400;
+  opacity: 0.68;
+  line-height: 1.25;
+  max-width: 22ch;
+  margin: 0 auto;
+}
+
+/* Layout interno */
+.counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  margin-bottom: 0.7rem;
+}
+
+/* Responsividade pequena */
+@media (max-width: 380px) {
+  .mid {
+    font-size: 1.1rem;
+  }
+  .tagline {
+    font-size: 0.95rem;
+  }
 }

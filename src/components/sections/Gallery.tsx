@@ -5,14 +5,12 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { 
-  HeartIcon, 
   XMarkIcon, 
   ChevronLeftIcon, 
   ChevronRightIcon
 } from '@heroicons/react/24/outline';
-import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { cn, formatDate } from '@/lib/utils';
-import { GlassCard, FloatingHearts, Carousel } from '@/components/ui';
+import { GlassCard, Carousel } from '@/components/ui';
 import { Photo } from '@/types';
 
 
@@ -31,8 +29,6 @@ interface GalleryProps {
 
 const Gallery: React.FC<GalleryProps> = ({ photos, title, className, carouselSlides }) => {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
-  const [likedPhotos, setLikedPhotos] = useState<Set<string>>(new Set());
-  const [showHearts, setShowHearts] = useState(false);
 
   const handlePhotoClick = (photo: Photo) => {
     setSelectedPhoto(photo);
@@ -40,21 +36,6 @@ const Gallery: React.FC<GalleryProps> = ({ photos, title, className, carouselSli
 
   const handleCloseModal = () => {
     setSelectedPhoto(null);
-  };
-
-  const handleLikePhoto = (photoId: string, event: React.MouseEvent) => {
-    event.stopPropagation();
-    const newLikedPhotos = new Set(likedPhotos);
-    
-    if (likedPhotos.has(photoId)) {
-      newLikedPhotos.delete(photoId);
-    } else {
-      newLikedPhotos.add(photoId);
-      setShowHearts(true);
-      setTimeout(() => setShowHearts(false), 100);
-    }
-    
-    setLikedPhotos(newLikedPhotos);
   };
 
   const nextPhoto = () => {
@@ -73,7 +54,6 @@ const Gallery: React.FC<GalleryProps> = ({ photos, title, className, carouselSli
 
   return (
     <div className={cn('w-full', className)}>
-      <FloatingHearts trigger={showHearts} count={12} size="lg">
         {/* Title */}
         {title && (
           <motion.div
@@ -83,7 +63,7 @@ const Gallery: React.FC<GalleryProps> = ({ photos, title, className, carouselSli
             viewport={{ once: true }}
             className="text-center mb-8"
           >
-            <h2 className="font-bold mb-3 text-gradient use-inter" style={{fontFamily: '"Inter", sans-serif', fontSize: 'clamp(1.875rem, 4vw, 3rem)'}}>
+            <h2 className="font-bold mb-3 bg-gradient-to-r from-[#bae6fd] via-[#8ED4FF] to-[#38bdf8] bg-clip-text text-transparent use-inter" style={{fontFamily: '"Inter", sans-serif', fontSize: 'clamp(1.875rem, 4vw, 3rem)'}}>
               {title}
             </h2>
             <p className="text-white/70 text-base">
@@ -168,61 +148,12 @@ const Gallery: React.FC<GalleryProps> = ({ photos, title, className, carouselSli
                         sizes="(max-width: 768px) 100vw, 80vw"
                       />
                     </div>
-
-                    {/* Photo Details */}
-                    <div className="p-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h3 className="text-xl font-display font-semibold text-white mb-2">
-                            {formatDate(selectedPhoto.date)}
-                          </h3>
-                          <p className="text-white/80 leading-relaxed">
-                            {selectedPhoto.caption}
-                          </p>
-                        </div>
-                        <button
-                          onClick={(e) => handleLikePhoto(selectedPhoto.id, e)}
-                          className={cn(
-                            'p-3 rounded-full transition-all duration-300',
-                            likedPhotos.has(selectedPhoto.id)
-                              ? 'bg-accent text-white'
-                              : 'bg-white/10 text-white hover:bg-white/20'
-                          )}
-                        >
-                          {likedPhotos.has(selectedPhoto.id) ? (
-                            <HeartSolid className="w-6 h-6" />
-                          ) : (
-                            <HeartIcon className="w-6 h-6" />
-                          )}
-                        </button>
-                      </div>
-                      
-                      {selectedPhoto.location && (
-                        <p className="text-white/60 text-sm">
-                          📍 {selectedPhoto.location}
-                        </p>
-                      )}
-                      
-                      {selectedPhoto.tags && selectedPhoto.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-4">
-                          {selectedPhoto.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="px-3 py-1 text-xs rounded-full bg-accent/20 text-accent border border-accent/30"
-                            >
-                              #{tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
                   </div>
                 </GlassCard>
               </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
-      </FloatingHearts>
     </div>
   );
 };

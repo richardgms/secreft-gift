@@ -204,7 +204,7 @@ export const ClickCounter: React.FC = () => {
         show={showMessage}
         onClose={() => setShowMessage(false)}
         title="Parabéns!"
-        message="Você clicou 100 vezes! Isso mostra o quanto você está explorando nosso museu especial. Richard te ama muito! 💕"
+        message="Você clicou 100 vezes! Isso mostra o quanto você está explorando nosso museu especial. Eu te amo muito! 🐧"
       />
     </>
   );

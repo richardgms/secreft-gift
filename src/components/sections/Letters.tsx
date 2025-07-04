@@ -1,18 +1,20 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   XMarkIcon,
   CalendarIcon,
   SparklesIcon,
   ClockIcon,
-  StarIcon
+  StarIcon,
+  HeartIcon
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { cn, formatDate } from '@/lib/utils';
 import { GlassCard, FloatingHearts } from '@/components/ui';
 import { Letter } from '@/types';
+import { Howler } from 'howler';
 
 interface LettersProps {
   letters: Letter[];
@@ -30,6 +32,11 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
   const [typewriterInterval, setTypewriterInterval] = useState<NodeJS.Timeout | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isClient, setIsClient] = useState(false);
+
+  // Refs de áudio para cartinhas com áudio
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  // Guardar volume anterior do player para restaurar depois
+  const previousPlayerVolumeRef = useRef<number | null>(null);
 
   // Verificar se estamos no cliente para evitar erro de hidratação
   useEffect(() => {
@@ -75,6 +82,59 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
     }
   }, [openLetter]);
 
+  // Tocar ou parar áudio quando openLetter mudar
+  useEffect(() => {
+    // Se já existe áudio tocando, parar
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+
+    // Se há carta aberta, toca áudio correspondente e ajusta volume do player
+    if (openLetter) {
+      // Reduzir volume do player (Howler) para 24% (20% a menos que antes), preservando valor anterior
+      previousPlayerVolumeRef.current = Howler.volume();
+      Howler.volume(0.24);
+
+      // Garantir que a música de fundo volte a tocar caso esteja pausada
+      // Percorre todos os Howl carregados e ativa play se não estiver tocando
+      // (útil quando o usuário pausou manualmente)
+      // @ts-ignore A propriedade _howls é interna, mas usamos aqui conscientemente
+      (Howler as any)._howls?.forEach((h: any) => {
+        try {
+          if (!h.playing()) {
+            h.play();
+          }
+        } catch (_) {/* ignore errors */}
+      });
+
+      // Tentar carregar áudio da pasta audios-cartinhas usando o id da carta
+      // Se for as cartas 2 ou 3, usar extensão .wav; caso contrário, .m4a
+      const extension = (openLetter.id === '2' || openLetter.id === '3') ? '.wav' : '.m4a';
+      const audioSrc = `/images/audios-cartinhas/cartinha${openLetter.id}${extension}`;
+      const audio = new Audio(audioSrc);
+      audioRef.current = audio;
+      // Reproduzir (ignorar possíveis restrições de autoplay em dev)
+      audio.play().catch(() => {/* autoplay restrictions ignored */});
+    }
+
+    // Limpeza quando componente desmontar ou carta fechar
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        audioRef.current = null;
+      }
+
+      // Restaurar volume original do player se alterado
+      if (previousPlayerVolumeRef.current !== null) {
+        Howler.volume(previousPlayerVolumeRef.current);
+        previousPlayerVolumeRef.current = null;
+      }
+    };
+  }, [openLetter]);
+
   const letterTypeIcons = {
     love: HeartSolid,
     memory: StarIcon,
@@ -83,17 +143,17 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
   };
 
   const letterTypeColors = {
-    love: 'bg-accent/20 border-accent/40 text-accent',
-    memory: 'bg-gold/20 border-gold/40 text-gold',
-    future: 'bg-purple-500/20 border-purple-400/40 text-purple-300',
-    special: 'bg-green-500/20 border-green-400/40 text-green-300',
+    love: 'bg-rose-300/20 border-rose-300/40 text-rose-300',
+    memory: 'bg-amber-200/20 border-amber-200/40 text-amber-200',
+    future: 'bg-blue-200/20 border-blue-200/40 text-blue-200',
+    special: 'bg-emerald-200/20 border-emerald-200/40 text-emerald-200',
   };
 
   const envelopeColors = {
-    love: 'from-accent/80 to-accent',
-    memory: 'from-gold/80 to-gold',
-    future: 'from-purple-500/80 to-purple-500',
-    special: 'from-green-500/80 to-green-500',
+    love: 'from-rose-300/80 to-rose-400',
+    memory: 'from-amber-200/80 to-amber-300',
+    future: 'from-blue-200/80 to-blue-300',
+    special: 'from-emerald-200/80 to-emerald-300',
   };
 
   // Verificar se uma carta está disponível
@@ -161,6 +221,10 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
     // Typewriter effect
     let currentIndex = 0;
     const content = letter.content;
+    // Velocidade dinâmica: carta 2 10% mais lenta
+    const baseDelay = 65;
+    const typingDelay = letter.id === '2' ? Math.round(baseDelay * 1.1) : baseDelay;
+
     const interval = setInterval(() => {
       if (currentIndex < content.length) {
         setTypewriterText(content.slice(0, currentIndex + 1));
@@ -170,7 +234,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
         clearInterval(interval);
         setTypewriterInterval(null);
       }
-    }, 50);
+    }, typingDelay);
 
     setTypewriterInterval(interval);
   };
@@ -180,6 +244,13 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
     if (typewriterInterval) {
       clearInterval(typewriterInterval);
       setTypewriterInterval(null);
+    }
+
+    // Parar áudio se estiver tocando
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
     }
 
     // Restaurar scroll da página
@@ -203,7 +274,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
             viewport={{ once: true }}
             className="text-center mb-12 md:mb-16"
           >
-            <h2 className="font-bold mb-4 text-gradient use-inter" style={{fontFamily: '"Inter", sans-serif', fontSize: 'clamp(2.25rem, 5vw, 4.5rem)'}}>
+            <h2 className="font-bold mb-4 bg-gradient-to-r from-[#bae6fd] via-[#8ED4FF] to-[#38bdf8] bg-clip-text text-transparent use-inter" style={{fontFamily: '"Inter", sans-serif', fontSize: 'clamp(2.25rem, 5vw, 4.5rem)'}}>
               {title}
             </h2>
             <p className="text-white/70 text-lg md:text-xl">
@@ -212,18 +283,30 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
           </motion.div>
         )}
 
-        {/* Letters Grid */}
+        {/* Letters Grid - Mobile: Uma embaixo da outra | Desktop: Como número 4 de dado */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-14 xl:gap-16 max-w-[1200px] mx-auto pt-8"
+          className="relative w-full max-w-[400px] md:max-w-[900px] mx-auto pt-8 pb-16 md:pb-20 
+                     flex flex-col items-center gap-20 p-4
+                     md:grid md:grid-cols-2 md:grid-rows-3 md:gap-x-8 md:gap-y-20 md:p-16 md:min-h-[600px] lg:min-h-[700px]"
         >
-          {letters.map((letter, index) => {
+          {letters.slice(0, 4).map((letter, index) => {
             const IconComponent = letterTypeIcons[letter.type];
             const available = isLetterAvailable(letter);
             const timeRemaining = getTimeUntilAvailable(letter);
+            
+            // Posições específicas para cada carta
+            // Mobile: sem posições (usa flex)
+            // Desktop: como número 4 de dado (4 cantos no grid)
+            const positions = [
+              'md:justify-self-start md:self-start',  // Desktop: Canto superior esquerdo
+              'md:justify-self-end md:self-start',    // Desktop: Canto superior direito
+              'md:justify-self-start md:self-end',    // Desktop: Canto inferior esquerdo
+              'md:justify-self-end md:self-end'       // Desktop: Canto inferior direito
+            ];
             
             return (
               <motion.div
@@ -232,7 +315,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                 whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="relative group"
+                className={`relative group w-full max-w-[280px] md:max-w-[200px] lg:max-w-[250px] ${positions[index] || ''}`}
               >
                 {/* Timer/Availability Info */}
                 {letter.availableAt && (
@@ -288,7 +371,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                 >
                   {/* Envelope Body */}
                   <div className={cn(
-                    'relative w-full h-44 md:h-48 lg:h-52 rounded-lg overflow-hidden',
+                    'relative w-full h-44 md:h-40 lg:h-44 rounded-lg overflow-hidden',
                     'bg-gradient-to-br shadow-lg transition-all duration-300',
                     available ? 'group-hover:shadow-xl' : 'opacity-60 grayscale',
                     `bg-gradient-to-br ${envelopeColors[letter.type]}`
@@ -303,7 +386,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                     
                     {/* Envelope Flap */}
                     <motion.div
-                      className="absolute top-0 left-0 right-0 h-18 md:h-20 lg:h-24 bg-white/10 border-b border-white/20"
+                      className="absolute top-0 left-0 right-0 h-14 md:h-16 lg:h-18 bg-white/10 border-b border-white/20"
                       style={{
                         clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
                       }}
@@ -323,7 +406,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                     
                     {/* Letter Preview */}
                     <div className="absolute inset-0 flex items-center justify-center p-4 md:p-6 lg:p-8 text-center">
-                      <h3 className="font-romantic text-xl md:text-2xl lg:text-3xl text-white font-semibold px-6 md:px-8 lg:px-10" style={{textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)'}}>
+                      <h3 className="font-romantic text-xl md:text-xl lg:text-2xl text-white font-semibold px-4 md:px-6 lg:px-8" style={{textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)'}}>
                         {letter.title}
                       </h3>
                     </div>
@@ -345,7 +428,7 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                       ease: "easeInOut"
                     }}
                   >
-                    ✨
+                    {letter.envelope.seal}
                   </motion.div>
                 </motion.div>
               </motion.div>
@@ -409,8 +492,8 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                             {openLetter.title}
                           </h3>
                           <p className="text-white/60 text-sm flex items-center gap-2">
-                            <CalendarIcon className="w-4 h-4" />
-                            {formatDate(openLetter.date)}
+                            <HeartIcon className="w-4 h-4" />
+                            Escrita com muito amor
                           </p>
                         </div>
                       </div>
@@ -462,11 +545,11 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
                       
                       {/* Signature */}
                       <div className="text-right mt-8">
-                        <p className="font-romantic text-xl text-accent">
+                        <p className="font-romantic text-xl text-white">
                           Com todo meu amor,
                         </p>
                         <p className="font-romantic text-2xl text-gold mt-2">
-                          Richard 💕
+                          Richard 🐧
                         </p>
                         <p className="text-white/40 text-xs mt-4 font-light">
                           Clique fora da carta ou pressione ESC para fechar

@@ -31,3 +31,4 @@ export {
 } from './LazyLoad'; 
 export { GradientButton, gradientButtonVariants } from './gradient-button';
 export { StarBorder } from './star-border'; 
+export { GlowCard } from './spotlight-card'; 

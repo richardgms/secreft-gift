@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Howl, Howler } from 'howler';
 import {
@@ -26,12 +26,16 @@ interface MusicPlayerProps {
   className?: string;
 }
 
-const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
+export interface MusicPlayerRef {
+  handleFirstInteraction: () => void;
+}
+
+const MusicPlayer = forwardRef<MusicPlayerRef, MusicPlayerProps>(({ playlist, className }, ref) => {
   // Configure Howler globally
   React.useEffect(() => {
     // Set global Howler settings
-    Howler.html5PoolSize = 5; // Limit HTML5 audio pool
-    Howler.autoUnlock = true; // Auto-unlock audio on user interaction
+    Howler.html5PoolSize = 10;
+    Howler.autoUnlock = true;
     
     return () => {
       // Cleanup all sounds on unmount
@@ -44,7 +48,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
     currentTrack: playlist.tracks[0] || null,
     currentPlaylist: playlist,
     currentTime: 0,
-    volume: 0.7,
+    volume: 0.56,
     isShuffling: false,
     isRepeating: false,
   });
@@ -57,40 +61,40 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
   
   const howlRef = useRef<Howl | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const audioUnlockedRef = useRef(false);
+
+  // Expor a função para ser chamada pelo pai
+  useImperativeHandle(ref, () => ({
+    handleFirstInteraction: () => {
+      if (audioUnlockedRef.current || !howlRef.current) return;
+      
+      console.log('Primeira interação do usuário detectada. Tocando música.');
+      audioUnlockedRef.current = true;
+      
+      const audioContext = Howler.ctx;
+      if (audioContext && audioContext.state === 'suspended') {
+        audioContext.resume().then(() => {
+          if (howlRef.current) {
+            handlePlayPause();
+          }
+        }).catch(e => console.error("Erro ao resumir o contexto de áudio", e));
+      } else {
+        handlePlayPause();
+      }
+    }
+  }));
 
   // Initialize audio
   useEffect(() => {
-    // Enable global audio unlock for iOS/Safari
-    const enableAudio = async () => {
-      try {
-        const audioContext = Howler.ctx;
-        if (audioContext && audioContext.state === 'suspended') {
-          await audioContext.resume();
-        }
-      } catch (error) {
-        console.warn('Could not resume audio context:', error);
-      }
-    };
-
-    // Add click listener to unlock audio
-    const unlockAudio = () => {
-      enableAudio();
-      document.removeEventListener('click', unlockAudio);
-      document.removeEventListener('touchstart', unlockAudio);
-    };
-
-    document.addEventListener('click', unlockAudio);
-    document.addEventListener('touchstart', unlockAudio);
-
     if (playerState.currentTrack) {
-      loadTrack(playerState.currentTrack);
+      loadTrack(playerState.currentTrack, playerState.isPlaying);
     }
     
     return () => {
       // Cleanup
       if (howlRef.current) {
         howlRef.current.stop();
-        howlRef.current.off(); // Remove all event listeners
+        howlRef.current.off();
         howlRef.current.unload();
         howlRef.current = null;
       }
@@ -98,20 +102,10 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-      
-      // Remove event listeners
-      document.removeEventListener('click', unlockAudio);
-      document.removeEventListener('touchstart', unlockAudio);
-      
-      // Reset state
-      setShouldAutoPlay(false);
     };
   }, []);
 
-  // Track the intention to auto-play to avoid conflicts
-  const [shouldAutoPlay, setShouldAutoPlay] = useState(false);
-
-  const loadTrack = (track: Track) => {
+  const loadTrack = (track: Track, shouldPlay = false) => {
     console.log('Loading track:', track.title, track.src);
     setIsLoading(true);
     
@@ -143,37 +137,24 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
     howlRef.current = new Howl({
       src: [encodedSrc],
       html5: true,
-        preload: 'metadata', // Preload metadata to check if file exists
-        pool: 3, // Increase pool size
-        format: ['mp3'], // Explicitly specify format
+      preload: 'metadata', // Apenas metadata até o usuário interagir
+      pool: 1, // Usar apenas um elemento <audio> por faixa
+      format: ['mp3'], // Explicitly specify format
       volume: playerState.volume,
       onload: () => {
-          console.log('Track loaded successfully:', track.title);
-          clearTimeout(loadingTimeout);
+        console.log('Track loaded successfully:', track.title);
+        clearTimeout(loadingTimeout);
         setIsLoading(false);
         
-        // Only auto-play if the user intended to play this track
-        if (shouldAutoPlay && howlRef.current) {
+        if (shouldPlay && audioUnlockedRef.current && howlRef.current) {
           console.log('Auto-playing after track load:', track.title);
-        setTimeout(() => {
-            if (howlRef.current && shouldAutoPlay) {
-            try {
-              howlRef.current.play();
-                setShouldAutoPlay(false); // Reset auto-play flag
-            } catch (error) {
-              console.warn('Auto-play failed after load:', error);
-                setShouldAutoPlay(false);
-              }
-            }
-          }, 100);
-          }
+          howlRef.current.play();
+        }
       },
         onloaderror: (id, error) => {
           console.error('Error loading track:', track.title, track.src, error);
           clearTimeout(loadingTimeout);
           setIsLoading(false);
-          setShouldAutoPlay(false); // Clear auto-play flag on error
-          // Don't auto-advance to next track on load error to avoid infinite loops
         },
       onend: () => {
         handleNextTrack();
@@ -194,8 +175,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
         onplayerror: (id, error) => {
           console.error('Playback error:', track.title, error);
           setPlayerState(prev => ({ ...prev, isPlaying: false }));
-          setShouldAutoPlay(false); // Clear auto-play flag on error
-          // Don't auto-advance to next track on error to avoid infinite loops
         },
       });
       
@@ -249,29 +228,26 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
 
     if (isLoading) {
       console.warn('Track still loading, cannot play yet');
-      // Set auto-play flag so track will play when loaded
-      if (!playerState.isPlaying) {
-        setShouldAutoPlay(true);
-      }
       return;
     }
 
     try {
-    if (playerState.isPlaying) {
+      if (playerState.isPlaying) {
         console.log('Pausing track');
-      howlRef.current.pause();
-        setShouldAutoPlay(false); // Clear auto-play flag when pausing
-    } else {
+        howlRef.current.pause();
+      } else {
         console.log('Playing track');
-        // Handle user interaction requirement for audio
-        const audioContext = Howler.ctx;
-        if (audioContext && audioContext.state === 'suspended') {
-          console.log('Resuming audio context');
-          await audioContext.resume();
+        
+        // Se o áudio ainda não foi liberado, liberar agora
+        if (!audioUnlockedRef.current) {
+          const audioContext = Howler.ctx;
+          if (audioContext && audioContext.state === 'suspended') {
+            await audioContext.resume();
+          }
+          audioUnlockedRef.current = true;
         }
         
-        const playPromise = howlRef.current.play();
-        console.log('Play promise:', playPromise);
+        howlRef.current.play();
       }
     } catch (error) {
       console.error('Playback error:', error);
@@ -296,12 +272,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
     const nextTrack = tracks[nextIndex];
     setPlayerState(prev => ({ ...prev, currentTrack: nextTrack }));
     
-    // Set auto-play flag if the user was playing music
-    if (wasPlaying) {
-      setShouldAutoPlay(true);
-    }
-    
-    loadTrack(nextTrack);
+    loadTrack(nextTrack, wasPlaying);
   };
 
   const handlePrevTrack = () => {
@@ -317,12 +288,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
     const prevTrack = tracks[prevIndex];
     setPlayerState(prev => ({ ...prev, currentTrack: prevTrack }));
     
-    // Set auto-play flag if the user was playing music
-    if (wasPlaying) {
-      setShouldAutoPlay(true);
-    }
-    
-    loadTrack(prevTrack);
+    loadTrack(prevTrack, wasPlaying);
   };
 
   const handleSeek = (value: number) => {
@@ -371,41 +337,15 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
     setCurrentIndex(index);
     setPlayerState(prev => ({ ...prev, currentTrack: track }));
     
-    // Set auto-play flag if the user was playing music
-    if (wasPlaying) {
-      setShouldAutoPlay(true);
-          }
-    
-    loadTrack(track);
+    loadTrack(track, wasPlaying);
   };
 
   const toggleMute = () => {
     if (playerState.volume > 0) {
       handleVolumeChange(0);
     } else {
-      handleVolumeChange(70);
+      handleVolumeChange(56);
     }
-  };
-
-  const debugAudio = () => {
-    console.log('Debug Audio:', {
-      howlState: howlRef.current ? {
-        state: howlRef.current.state(),
-        duration: howlRef.current.duration(),
-        volume: howlRef.current.volume(),
-        playing: howlRef.current.playing(),
-      } : 'No howl instance',
-      howlerState: {
-        ctx: Howler.ctx?.state,
-        volume: Howler.volume(),
-        html5PoolSize: Howler.html5PoolSize,
-      },
-      playerState: {
-        isPlaying: playerState.isPlaying,
-        currentTime: playerState.currentTime,
-        volume: playerState.volume,
-      }
-    });
   };
 
   const currentDuration = howlRef.current ? howlRef.current.duration() : 0;
@@ -507,7 +447,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
                   max="100"
                   value={playerState.volume * 100}
                   onChange={(e) => handleVolumeChange(Number(e.target.value))}
-                  className="w-20 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
+                  className="w-20 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer slider hidden md:block"
                 />
 
                 <motion.button
@@ -591,19 +531,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
                     >
                       <ArrowsRightLeftIcon className="w-5 h-5" />
                     </motion.button>
-
-                {/* Debug Audio Button (development only) */}
-                {process.env.NODE_ENV === 'development' && (
-                  <motion.button
-                    onClick={debugAudio}
-                    className="p-2 rounded-full hover:bg-white/10 transition-colors text-yellow-400"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    title="Debug Audio"
-                  >
-                    <span className="text-xs">🔧</span>
-                  </motion.button>
-                )}
 
                     <motion.button
                       onClick={handlePrevTrack}
@@ -701,6 +628,8 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlist, className }) => {
       </motion.div>
     </div>
   );
-};
+});
+
+MusicPlayer.displayName = 'MusicPlayer';
 
 export default MusicPlayer; 

@@ -207,10 +207,10 @@ export default function Carousel({ slides, className, onSlideClick }: CarouselPr
       aria-labelledby={`carousel-heading-${id}`}
     >
       <ul
-        className="absolute flex mx-[-4vmin] transition-transform duration-700 ease-out"
+        className="absolute flex transition-transform duration-700 ease-out"
         style={{
-          transform: `translateX(-${current * (100 / slides.length)}%)`,
-          width: `${slides.length * 100}%`,
+          transform: `translateX(calc(-${current * 70}vmin - ${current * 8}vmin))`,
+          width: `calc(${slides.length * 70}vmin + ${slides.length * 8}vmin)`,
         }}
       >
         {slides.map((slide, index) => (
