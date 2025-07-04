@@ -625,8 +625,8 @@ Obrigado por todas as coisas que já vivemos juntos, é uma honra dividir e comp
   {
     id: '3',
     type: 'future',
-    title: 'Por que te amo?',
-    content: `A resposta pra essa pergunta parece ser meio difícil, e realmente é. Poderia citar uma lista de mil coisas pelas quais eu te amo. Te amar parece algo que eu sempre fui predestinado a fazer, sinto que nasci pra estar contigo, viver essa vida louca ao teu lado, poder te chamar de esposa um dia. Eu te amo por estar sempre comigo, nos bons e nos piores momentos, por me apoiar, por ser tão ótima e engraçada ao ponto de conseguir melhorar os meus dias, não importando o quão ruins eles possam estar sendo. Eu te amo pelas suas piadas bobas e reações inusitadas, continue sendo você,e eu continuarei te amando. Me sinto até o Will Traynor, minha vida só passou a fazer sentido ao seu lado, e eu não quero mais ser como eu era antes de você.`,
+    title: 'Por Que Te Amo?',
+    content: `A resposta pra essa pergunta parece ser meio difícil, e realmente é. Poderia citar uma lista de mil coisas pelas quais eu te amo. Te amar parece algo que eu sempre fui predestinado a fazer, sinto que nasci pra estar contigo, viver essa vida louca ao teu lado, poder te chamar de esposa um dia. Eu te amo por estar sempre comigo, nos bons e nos piores momentos, por me apoiar, por ser tão ótima e engraçada ao ponto de conseguir melhorar os meus dias, não importando o quão ruins eles possam estar sendo. Eu te amo pelas suas piadas bobas e reações inusitadas, continue sendo você, e eu continuarei te amando. Me sinto até o Will Traynor, minha vida só passou a fazer sentido ao seu lado, e eu não quero mais ser como eu era antes de você.`,
     date: '2024-11-15',
     envelope: {
       color: '#60a5fa',
@@ -637,12 +637,12 @@ Obrigado por todas as coisas que já vivemos juntos, é uma honra dividir e comp
   {
     id: '4',
     type: 'special',
-    title: 'Nossos sonhos juntos',
-    content: `Ana, você é a pessoa mais especial que já conheci. Cada momento ao seu lado é um presente que guardo no coração. Você me ensina a ser uma pessoa melhor todos os dias.
-
-Seu sorriso ilumina até os meus dias mais difíceis, e sua força me inspira a nunca desistir dos nossos sonhos. Obrigado por me amar do jeito que eu sou e por fazer da nossa história algo tão bonito.
-
-Te amo mais que as palavras podem expressar, neguinha. Você é minha vida.`,
+    title: 'Nossos Sonhos Juntos',
+    content: `Quando olho pro futuro só enxergo você, você é o meu maior sonho, tudo que eu almejo eu me imagino alcançado ao teu lado, me sinto confortavel o suficiente para escolher estar contigo pro resto da vida e eu não tenho dúvidas quanto a isso. Não sei se você sabe, mas é claro que eu sonho e penso em você barrigudinha, gerando nossa maior felicidade. Com certeza contarei a Aurora e Thomas o quão a mãe deles foi uma namorada incrivel, meio doidinha, mas incrivel. Prometo te fazer muito mais feliz do que um dia já fiz, ainda tenho muito a te oferecer, e espero que continue me concendo a oportinidade de mostrar isso a você todos os dias.
+    
+    PS: Prometo que quando casarmos teremos um cachorro, três gatos, um papagaio, dois coelhos (um preto e um branco) e um casal de calopsita.
+    
+    Eu te amo 🤍`,
     date: '2024-12-10',
     envelope: {
       color: '#10b981',

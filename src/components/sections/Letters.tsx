@@ -110,8 +110,8 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
       });
 
       // Tentar carregar áudio da pasta audios-cartinhas usando o id da carta
-      // Se for as cartas 2 ou 3, usar extensão .wav; caso contrário, .m4a
-      const extension = (openLetter.id === '2' || openLetter.id === '3') ? '.wav' : '.m4a';
+      // Se for as cartas 2, 3 ou 4, usar extensão .wav; caso contrário, .m4a
+      const extension = (openLetter.id === '2' || openLetter.id === '3' || openLetter.id === '4') ? '.wav' : '.m4a';
       const audioSrc = `/images/audios-cartinhas/cartinha${openLetter.id}${extension}`;
       const audio = new Audio(audioSrc);
       audioRef.current = audio;
@@ -223,7 +223,14 @@ const Letters: React.FC<LettersProps> = ({ letters, title, className }) => {
     const content = letter.content;
     // Velocidade dinâmica: carta 2 10% mais lenta
     const baseDelay = 65;
-    const typingDelay = letter.id === '2' ? Math.round(baseDelay * 1.1) : baseDelay;
+    let typingDelay = baseDelay;
+    if (letter.id === '2') {
+      typingDelay = Math.round(baseDelay * 1.1); // 10% mais lento
+    } else if (letter.id === '3') {
+      typingDelay = Math.round(baseDelay * 0.95); // 5% mais rápido
+    } else if (letter.id === '4') {
+      typingDelay = Math.round(baseDelay * 1.05); // 5% mais lento
+    }
 
     const interval = setInterval(() => {
       if (currentIndex < content.length) {
