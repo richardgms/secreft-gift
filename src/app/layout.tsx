@@ -26,8 +26,8 @@ export const generateViewport = () => ({
 
 export const metadata: Metadata = {
   metadataBase: new URL('http://localhost:3000'),
-  title: "Museu Flutuante 💕 | Para Ana Beatriz",
-  description: "Um museu pessoal do nosso amor - Uma experiência digital única e romântica criada especialmente para você, Ana Beatriz.",
+  title: "Museu Flutuante 💕 | Para Mayanne",
+  description: "Um museu pessoal do nosso amor - Uma experiência digital única e romântica criada especialmente para você, Mayanne.",
   keywords: ["presente", "amor", "relacionamento", "memórias", "romântico", "museu", "digital"],
   authors: [{ name: "Nathan" }],
   creator: "Nathan",
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
     nocache: true,
   },
   icons: {
-    icon: "/favicon.ico",
-    },
+    icon: "/images/icon/baleia.png",
+  },
 
 };
 
