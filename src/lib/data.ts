@@ -24,7 +24,7 @@ export const galleryPhotos: Photo[] = [
     id: '3',
     src: '/images/galeria/33.jpg',
     alt: 'Momento de carinho',
-    caption: 'Ana, eu amo como você fica linda em qualquer foto que a gente tira 🌟',
+    caption: 'Mayanne, eu amo como você fica linda em qualquer foto que a gente tira 🌟',
     date: '2024-12-23',
     location: 'Nossos momentos',
     tags: ['carinho', 'beleza'],
@@ -51,7 +51,7 @@ export const galleryPhotos: Photo[] = [
     id: '6',
     src: '/images/galeria/66.jpg',
     alt: 'Momentos únicos',
-    caption: 'Ana, você é a protagonista de todos os meus momentos favoritos 📸💕',
+    caption: 'Mayanne, você é a protagonista de todos os meus momentos favoritos 📸💕',
     date: '2025-05-03',
     location: 'Construindo memórias',
     tags: ['memórias', 'especial'],
@@ -79,12 +79,12 @@ export const carouselSlides = galleryPhotos.map((photo, index) => {
   ];
 
   const descriptions = [
-    'Sou completamente apaixonado por você, amor ✨',
-    'Com você tudo fica mais leve e bonito ❤️',
+    'Sou completamente apaixonado por você, amor 🍒',
+    'Com você tudo fica mais leve e bonito 🤟🏻',
     'Você me enche de orgulho em tudo que faz, meu bem 🌟',
     'Ao seu lado eu me sinto completo e feliz 🤍',
     'Branquela, nossa cumplicidade é tudo pra mim 🐋',
-    'Amo cada detalhe em você, Ana ❤️'
+    'Amo cada detalhe em você, nê 🌷'
   ];
   
   return {

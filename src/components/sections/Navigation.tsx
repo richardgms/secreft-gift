@@ -24,7 +24,7 @@ interface NavigationProps {
 const navigationSections: NavigationSection[] = [
   {
     id: 'home',
-    title: 'Ana Beatriz',
+    title: 'Mayanne',
     icon: 'heart',
     href: '#home',
     isActive: false,
